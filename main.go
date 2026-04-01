@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 	"time"
+
+	newApi "github.com/caioleone/go-user-crud/api"
 )
 
 func main() {
@@ -11,7 +13,7 @@ func main() {
 
 func run() error {
 	db := make(map[string]string)
-	handler := NewHandler(db)
+	handler := newApi.NewHandler(db)
 
 	s := http.Server{
 		ReadTimeout:  10 * time.Second,
