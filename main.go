@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	newApi "github.com/caioleone/go-user-crud/api"
+	newApi "github.com/caioleone/go-user-crud/api/"
 )
 
 func main() {

@@ -22,7 +22,7 @@ A API será responsável por gerenciar:
 1. Magia (Spell)
 ```
 {
-  "id": "",
+  "id": "", // UUID, obrigatório
   "name": "Bola de Fogo",
   "description": "Uma explosão flamejante devastadora",
   "mana_cost": 50,
@@ -40,7 +40,7 @@ A API será responsável por gerenciar:
 2. Criatura (Creature)
 ```
 {
-  "id": "",
+  "id": "", // UUID, obrigatório
   "name": "Dragão Vermelho",
   "description": "Uma criatura lendária que cospe fogo",
   "hp": 500,
