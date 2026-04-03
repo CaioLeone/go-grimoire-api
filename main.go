@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	newApi "github.com/caioleone/go-user-crud/api/"
+	newApi "github.com/caioleone/go-grimoire-api/api/handler"
 )
 
 func main() {
@@ -13,7 +13,7 @@ func main() {
 
 func run() error {
 	db := make(map[string]string)
-	handler := newApi.NewHandler(db)
+	handler := newApi.NewHandlerSpell(db)
 
 	s := http.Server{
 		ReadTimeout:  10 * time.Second,
