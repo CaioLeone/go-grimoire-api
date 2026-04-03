@@ -24,3 +24,8 @@ func (c *CreatureRepository) FindAll() []domainApi.CreatureModel {
 	}
 	return creatures
 }
+
+func (c *CreatureRepository) FindById(id uuid.UUID) (domainApi.CreatureModel, bool) {
+	creature, exists := c.data[id]
+	return creature, exists
+}
