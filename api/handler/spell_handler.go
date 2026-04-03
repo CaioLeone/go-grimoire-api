@@ -5,6 +5,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+
+	repoApi "github.com/caioleone/go-grimoire-api/api/repository"
 )
 
 type PostBodySpell struct {
@@ -16,7 +18,7 @@ type ResponseSpell struct {
 	Data  any    `json:"data,omitempty"`
 }
 
-func NewHandlerSpell(db map[string]string) http.Handler {
+func NewHandlerSpell(repoSpell *repoApi.SpellRepository) http.Handler {
 	r := chi.NewMux()
 
 	r.Use(middleware.Recoverer)
@@ -24,9 +26,39 @@ func NewHandlerSpell(db map[string]string) http.Handler {
 	r.Use(middleware.Logger)
 
 	//Spell Route
-	r.Route("/spell", func(r chi.Router) {
+	r.Route("/api/spell", func(r chi.Router) {
+		//POST
+		r.Post("/", handleCreateSpell(repoSpell))
 
+		//GET
+		r.Get("/", handleGetSpell(repoSpell))
+		r.Get("/{id}", handleGetByIdSpell(repoSpell))
+
+		//PUT
+		r.Put("/{id}", handleUpdateSpell(repoSpell))
+
+		r.Delete("{id}", handleDeleteSpell(repoSpell))
 	})
 
 	return r
+}
+
+func handleCreateSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {}
+}
+
+func handleGetSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {}
+}
+
+func handleGetByIdSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {}
+}
+
+func handleUpdateSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {}
+}
+
+func handleDeleteSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {}
 }
