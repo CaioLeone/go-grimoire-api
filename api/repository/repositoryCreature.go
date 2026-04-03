@@ -29,3 +29,33 @@ func (c *CreatureRepository) FindById(id uuid.UUID) (domainApi.CreatureModel, bo
 	creature, exists := c.data[id]
 	return creature, exists
 }
+
+// INSERT
+func (c *CreatureRepository) Insert(creature domainApi.CreatureModel) domainApi.CreatureModel {
+	creature.ID = uuid.New()
+	c.data[creature.ID] = creature
+	return creature
+}
+
+// UPDATE
+func (c *CreatureRepository) Update(id uuid.UUID, updated domainApi.CreatureModel) (domainApi.CreatureModel, bool) {
+	updated, exists := c.data[id]
+	if !exists {
+		return domainApi.CreatureModel{}, false
+	}
+
+	updated.ID = id
+	c.data[id] = updated
+	return updated, true
+}
+
+// DELETE
+func (c *CreatureRepository) Delete(id uuid.UUID) (domainApi.CreatureModel, bool) {
+	deleted, exists := c.data[id]
+	if !exists {
+		return domainApi.CreatureModel{}, false
+	}
+
+	delete(c.data, id)
+	return deleted, true
+}
