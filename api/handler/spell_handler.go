@@ -1,11 +1,13 @@
 package api
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
+	domApi "github.com/caioleone/go-grimoire-api/api/domain"
 	repoApi "github.com/caioleone/go-grimoire-api/api/repository"
 )
 
@@ -44,7 +46,13 @@ func NewHandlerSpell(repoSpell *repoApi.SpellRepository) http.Handler {
 }
 
 func handleCreateSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {}
+	return func(w http.ResponseWriter, r *http.Request) {
+		var spell domApi.SpellModel
+
+		if err := json.NewDecoder(r.Body).Decode(&spell); err != nil {
+			return
+		}
+	}
 }
 
 func handleGetSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
