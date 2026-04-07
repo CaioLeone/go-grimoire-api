@@ -5,7 +5,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type CreatureRepository struct {
+type MemoryCreatureRepository struct {
 	data map[uuid.UUID]domainApi.CreatureModel
 }
 

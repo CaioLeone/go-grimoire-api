@@ -5,7 +5,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type SpellRepository struct {
+type MemorySpellRepository struct {
 	data map[uuid.UUID]domainApi.SpellModel
 }
 
