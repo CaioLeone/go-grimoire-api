@@ -9,14 +9,14 @@ type MemoryCreatureRepository struct {
 	data map[uuid.UUID]domainApi.CreatureModel
 }
 
-func NewRepositoryCreature() *CreatureRepository {
-	return &CreatureRepository{
+func NewMemoryRepositoryCreature() *MemoryCreatureRepository {
+	return &MemoryCreatureRepository{
 		data: make(map[uuid.UUID]domainApi.CreatureModel),
 	}
 }
 
 // FIND
-func (c *CreatureRepository) FindAll() []domainApi.CreatureModel {
+func (c *MemoryCreatureRepository) FindAll() []domainApi.CreatureModel {
 	creatures := []domainApi.CreatureModel{}
 
 	for _, creature := range c.data {
@@ -25,21 +25,21 @@ func (c *CreatureRepository) FindAll() []domainApi.CreatureModel {
 	return creatures
 }
 
-func (c *CreatureRepository) FindById(id uuid.UUID) (domainApi.CreatureModel, bool) {
+func (c *MemoryCreatureRepository) FindById(id uuid.UUID) (domainApi.CreatureModel, bool) {
 	creature, exists := c.data[id]
 	return creature, exists
 }
 
 // INSERT
-func (c *CreatureRepository) Insert(creature domainApi.CreatureModel) domainApi.CreatureModel {
+func (c *MemoryCreatureRepository) Insert(creature domainApi.CreatureModel) domainApi.CreatureModel {
 	creature.ID = uuid.New()
 	c.data[creature.ID] = creature
 	return creature
 }
 
 // UPDATE
-func (c *CreatureRepository) Update(id uuid.UUID, updated domainApi.CreatureModel) (domainApi.CreatureModel, bool) {
-	updated, exists := c.data[id]
+func (c *MemoryCreatureRepository) Update(id uuid.UUID, updated domainApi.CreatureModel) (domainApi.CreatureModel, bool) {
+	_, exists := c.data[id]
 	if !exists {
 		return domainApi.CreatureModel{}, false
 	}
@@ -50,7 +50,7 @@ func (c *CreatureRepository) Update(id uuid.UUID, updated domainApi.CreatureMode
 }
 
 // DELETE
-func (c *CreatureRepository) Delete(id uuid.UUID) (domainApi.CreatureModel, bool) {
+func (c *MemoryCreatureRepository) Delete(id uuid.UUID) (domainApi.CreatureModel, bool) {
 	deleted, exists := c.data[id]
 	if !exists {
 		return domainApi.CreatureModel{}, false
