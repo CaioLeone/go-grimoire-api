@@ -1,9 +1,13 @@
 package api
 
+import (
+	repoApi "github.com/caioleone/go-grimoire-api/api/repository"
+)
+
 type CreatureUsecase struct{
-	repo CreatureRepository
+	repo repoApi.MemoryCreatureRepository
 }
 
-func NewCreatureUseCase(repo CreatureRepository) *CreatureUsecase{
+func NewCreatureUseCase(repo repoApi.MemoryCreatureRepository) *CreatureUsecase{
 	return &CreatureUsecase{repo: repo}
 }
