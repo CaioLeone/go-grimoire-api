@@ -11,30 +11,30 @@ import (
 )
 
 /*
-// func NewHandlerSpell(repoSpell repoApi.SpellRepository) http.Handler {
-// 	r := chi.NewMux()
+func NewHandlerSpell(repoSpell repoApi.SpellRepository) http.Handler {
+	r := chi.NewMux()
 
-// 	r.Use(middleware.Recoverer)
-// 	r.Use(middleware.RequestID)
-// 	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+	r.Use(middleware.RequestID)
+	r.Use(middleware.Logger)
 
-// 	//Spell Route
-// 	r.Route("/api/spell", func(r chi.Router) {
-// 		//POST
-// 		r.Post("/", handleCreateSpell(repoSpell))
+	//Spell Route
+	r.Route("/api/spell", func(r chi.Router) {
+		//POST
+		r.Post("/", handleCreateSpell(repoSpell))
 
-// 		//GET
-// 		r.Get("/", handleGetSpell(repoSpell))
-// 		r.Get("/{id}", handleGetByIdSpell(repoSpell))
+		//GET
+		r.Get("/", handleGetSpell(repoSpell))
+		r.Get("/{id}", handleGetByIdSpell(repoSpell))
 
-// 		//PUT
-// 		r.Put("/{id}", handleUpdateSpell(repoSpell))
+		//PUT
+		r.Put("/{id}", handleUpdateSpell(repoSpell))
 
-// 		r.Delete("{id}", handleDeleteSpell(repoSpell))
-// 	})
+		r.Delete("{id}", handleDeleteSpell(repoSpell))
+	})
 
-// 	return r
-// }
+	return r
+}
 */
 
 func (h *SpellHandler) handleCreateSpell(w http.ResponseWriter, r *http.Request) {
