@@ -12,7 +12,7 @@ import (
 	repoApi "github.com/caioleone/go-grimoire-api/api/repository"
 )
 
-func NewHandlerCreature(repoCreature *repoApi.CreatureRepository) http.Handler {
+func NewHandlerCreature(repoCreature repoApi.CreatureRepository) http.Handler {
 	r := chi.NewMux()
 
 	r.Use(middleware.Recoverer)
@@ -30,7 +30,7 @@ func NewHandlerCreature(repoCreature *repoApi.CreatureRepository) http.Handler {
 	return r
 }
 
-func handleCreateCreature(repoCreature *repoApi.CreatureRepository) http.HandlerFunc {
+func handleCreateCreature(repoCreature repoApi.CreatureRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var creature domApi.CreatureModel
 
@@ -50,7 +50,7 @@ func handleCreateCreature(repoCreature *repoApi.CreatureRepository) http.Handler
 	}
 }
 
-func handleGetAllCreature(repoCreature *repoApi.CreatureRepository) http.HandlerFunc {
+func handleGetAllCreature(repoCreature repoApi.CreatureRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		creature := repoCreature.FindAll()
@@ -58,7 +58,7 @@ func handleGetAllCreature(repoCreature *repoApi.CreatureRepository) http.Handler
 	}
 }
 
-func handleGetByIdCreature(repoCreature *repoApi.CreatureRepository) http.HandlerFunc {
+func handleGetByIdCreature(repoCreature repoApi.CreatureRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr := chi.URLParam(r, "id")
 
@@ -76,7 +76,7 @@ func handleGetByIdCreature(repoCreature *repoApi.CreatureRepository) http.Handle
 	}
 }
 
-func handleUpdateCreature(repoCreature *repoApi.CreatureRepository) http.HandlerFunc {
+func handleUpdateCreature(repoCreature repoApi.CreatureRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr := chi.URLParam(r, "id")
 		id, err := uuid.Parse(idStr)
@@ -101,7 +101,7 @@ func handleUpdateCreature(repoCreature *repoApi.CreatureRepository) http.Handler
 	}
 }
 
-func handleDeleteCreature(repoCreature *repoApi.CreatureRepository) http.HandlerFunc {
+func handleDeleteCreature(repoCreature repoApi.CreatureRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr := chi.URLParam(r, "id")
 		id, err := uuid.Parse(idStr)

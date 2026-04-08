@@ -12,7 +12,7 @@ import (
 	repoApi "github.com/caioleone/go-grimoire-api/api/repository"
 )
 
-func NewHandlerSpell(repoSpell *repoApi.SpellRepository) http.Handler {
+func NewHandlerSpell(repoSpell repoApi.SpellRepository) http.Handler {
 	r := chi.NewMux()
 
 	r.Use(middleware.Recoverer)
@@ -37,7 +37,7 @@ func NewHandlerSpell(repoSpell *repoApi.SpellRepository) http.Handler {
 	return r
 }
 
-func handleCreateSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
+func handleCreateSpell(repo repoApi.SpellRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var spell domApi.SpellModel
 
@@ -56,7 +56,7 @@ func handleCreateSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
 	}
 }
 
-func handleGetSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
+func handleGetSpell(repo repoApi.SpellRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		spell := repo.FindAll()
@@ -64,7 +64,7 @@ func handleGetSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
 	}
 }
 
-func handleGetByIdSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
+func handleGetByIdSpell(repo repoApi.SpellRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr := chi.URLParam(r, "id")
 
@@ -83,7 +83,7 @@ func handleGetByIdSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
 	}
 }
 
-func handleUpdateSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
+func handleUpdateSpell(repo repoApi.SpellRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr := chi.URLParam(r, "id")
 
@@ -109,7 +109,7 @@ func handleUpdateSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
 	}
 }
 
-func handleDeleteSpell(repo *repoApi.SpellRepository) http.HandlerFunc {
+func handleDeleteSpell(repo repoApi.SpellRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr := chi.URLParam(r, "id")
 
