@@ -16,7 +16,7 @@ type CreatureRepository interface {
 type SpellRepository interface {
 	FindAll() []domainApi.SpellModel
 	FindById(id uuid.UUID) (domainApi.SpellModel, bool)
-	Insert(creature domainApi.SpellModel) domainApi.SpellModel
-	Update(id uuid.UUID, creature domainApi.SpellModel) (domainApi.SpellModel, bool)
+	Insert(spell domainApi.SpellModel) domainApi.SpellModel
+	Update(id uuid.UUID, spell domainApi.SpellModel) (domainApi.SpellModel, bool)
 	Delete(id uuid.UUID) (domainApi.SpellModel, bool)
 }
