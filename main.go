@@ -4,7 +4,8 @@ import (
 	"net/http"
 	"time"
 
-	newApi "github.com/caioleone/go-grimoire-api/api/handler"
+	handlerApi "github.com/caioleone/go-grimoire-api/api/handler"
+	repoApi "github.com/caioleone/go-grimoire-api/api/repository"
 )
 
 func main() {
@@ -12,8 +13,8 @@ func main() {
 }
 
 func run() error {
-	db := make(map[string]string)
-	handler := newApi.NewHandlerSpell(db)
+	repoSpell := repoApi.NewMemoryRepositorySpell()
+	handler := handlerApi.NewHandlerSpell(repoSpell)
 
 	s := http.Server{
 		ReadTimeout:  10 * time.Second,
