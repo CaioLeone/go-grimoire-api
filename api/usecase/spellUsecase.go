@@ -5,6 +5,7 @@ import (
 
 	domApi "github.com/caioleone/go-grimoire-api/api/domain"
 	repoApi "github.com/caioleone/go-grimoire-api/api/repository"
+	"github.com/google/uuid"
 )
 
 type SpellUsecase struct {
@@ -30,4 +31,16 @@ func (u *SpellUsecase) CreateSpell(spell domApi.SpellModel) (domApi.SpellModel, 
 
 func (u *SpellUsecase) GetAll() []domApi.SpellModel {
 	return u.repo.FindAll()
+}
+
+func (u *SpellUsecase) GetById(id uuid.UUID) (domApi.SpellModel, bool) {
+	return u.repo.FindById(id)
+}
+
+func (u *SpellUsecase) Update(id uuid.UUID, s domApi.SpellModel) (domApi.SpellModel, bool) {
+	return u.repo.Update(id, s)
+}
+
+func (u *SpellUsecase) Delete(id uuid.UUID) (domApi.SpellModel, bool) {
+	return u.repo.Delete(id)
 }

@@ -3,19 +3,20 @@ package api
 import (
 	"net/http"
 
-	repoApi "github.com/caioleone/go-grimoire-api/api/repository"
+	useApi "github.com/caioleone/go-grimoire-api/api/usecase"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
 
 type SpellHandler struct {
-	repo repoApi.SpellRepository
+	useCase *useApi.SpellUsecase
 }
 
-func NewHandlerSpell(repo repoApi.SpellRepository) http.Handler {
+func NewHandlerSpell(u *useApi.SpellUsecase) http.Handler {
 	h := &SpellHandler{
-		repo: repo,
+		useCase: u,
 	}
+
 	r := chi.NewMux()
 
 	r.Use(middleware.Recoverer)

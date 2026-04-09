@@ -10,25 +10,6 @@ import (
 	domApi "github.com/caioleone/go-grimoire-api/api/domain"
 )
 
-/*
-func NewHandlerCreature(repoCreature repoApi.CreatureRepository) http.Handler {
-	r := chi.NewMux()
-
-	r.Use(middleware.Recoverer)
-	r.Use(middleware.RequestID)
-	r.Use(middleware.Logger)
-
-	//Creature Route
-	r.Route("/api/creature", func(r chi.Router) {
-		r.Post("/", handleCreateCreature(repoCreature))
-		r.Get("/", handleGetAllCreature(repoCreature))
-		r.Get("/{id}", handleGetByIdCreature(repoCreature))
-		r.Put("{id}", handleUpdateCreature(repoCreature))
-		r.Delete("/{id}", handleDeleteCreature(repoCreature))
-	})
-	return r
-}
-*/
 
 func (h *CreatureHandler) handleCreateCreature(w http.ResponseWriter, r *http.Request) {
 

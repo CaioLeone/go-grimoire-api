@@ -10,8 +10,6 @@ import (
 	domApi "github.com/caioleone/go-grimoire-api/api/domain"
 )
 
-
-
 func (h *SpellHandler) handleCreateSpell(w http.ResponseWriter, r *http.Request) {
 	var spell domApi.SpellModel
 
@@ -20,20 +18,20 @@ func (h *SpellHandler) handleCreateSpell(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	if len(spell.Name) < 2 || len(spell.Description) < 2 || len(spell.Element) < 2 || spell.ManaCost <= 0 {
-		SendJson(w, Response{Error: "Invalid Fields"}, http.StatusBadRequest)
+	created, err := h.useCase.CreateSpell(spell)
+	if err != nil {
+		SendJson(w, Response{Error: err.Error()}, http.StatusBadRequest)
 		return
 	}
 
-	created := h.repo.Insert(spell)
 	SendJson(w, Response{Data: created}, http.StatusCreated)
 
 }
 
 func (h *SpellHandler) handleGetSpell(w http.ResponseWriter, r *http.Request) {
 
-	spell := h.repo.FindAll()
-	SendJson(w, Response{Data: spell}, http.StatusOK)
+	spells := h.useCase.GetAll()
+	SendJson(w, Response{Data: spells}, http.StatusOK)
 
 }
 
@@ -46,7 +44,7 @@ func (h *SpellHandler) handleGetByIdSpell(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	spell, ok := h.repo.FindById(id)
+	spell, ok := h.useCase.GetById(id)
 	if !ok {
 		SendJson(w, Response{Error: "Spell Not Found"}, http.StatusBadRequest)
 	}
@@ -71,7 +69,7 @@ func (h *SpellHandler) handleUpdateSpell(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	result, ok := h.repo.Update(id, updated)
+	result, ok := h.useCase.Update(id, updated)
 	if !ok {
 		SendJson(w, Response{Error: "Spell Not Found"}, http.StatusNotFound)
 		return
@@ -91,7 +89,7 @@ func (h *SpellHandler) handleDeleteSpell(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	deleted, ok := h.repo.Delete(id)
+	deleted, ok := h.useCase.Delete(id)
 	if !ok {
 		SendJson(w, Response{Error: "User Not Found"}, http.StatusNotFound)
 		return
