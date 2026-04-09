@@ -10,32 +10,7 @@ import (
 	domApi "github.com/caioleone/go-grimoire-api/api/domain"
 )
 
-/*
-func NewHandlerSpell(repoSpell repoApi.SpellRepository) http.Handler {
-	r := chi.NewMux()
 
-	r.Use(middleware.Recoverer)
-	r.Use(middleware.RequestID)
-	r.Use(middleware.Logger)
-
-	//Spell Route
-	r.Route("/api/spell", func(r chi.Router) {
-		//POST
-		r.Post("/", handleCreateSpell(repoSpell))
-
-		//GET
-		r.Get("/", handleGetSpell(repoSpell))
-		r.Get("/{id}", handleGetByIdSpell(repoSpell))
-
-		//PUT
-		r.Put("/{id}", handleUpdateSpell(repoSpell))
-
-		r.Delete("{id}", handleDeleteSpell(repoSpell))
-	})
-
-	return r
-}
-*/
 
 func (h *SpellHandler) handleCreateSpell(w http.ResponseWriter, r *http.Request) {
 	var spell domApi.SpellModel

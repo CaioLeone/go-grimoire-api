@@ -6,6 +6,7 @@ import (
 
 	handlerApi "github.com/caioleone/go-grimoire-api/api/handler"
 	repoApi "github.com/caioleone/go-grimoire-api/api/repository"
+	"github.com/go-chi/chi/v5"
 )
 
 func main() {
@@ -13,15 +14,26 @@ func main() {
 }
 
 func run() error {
+
+	//REPOS
 	repoSpell := repoApi.NewMemoryRepositorySpell()
-	handler := handlerApi.NewHandlerSpell(repoSpell)
+	repoCreature := repoApi.NewMemoryRepositoryCreature()
+
+	//HANDLERS
+	spellHandler := handlerApi.NewHandlerSpell(repoSpell)
+	creatureHandler := handlerApi.NewHandlerCreature(repoCreature)
+
+	r := chi.NewMux()
+
+	r.Mount("/", spellHandler)
+	r.Mount("/", creatureHandler)
 
 	s := http.Server{
 		ReadTimeout:  10 * time.Second,
 		IdleTimeout:  time.Minute,
 		WriteTimeout: 10 * time.Second,
 		Addr:         ":8080",
-		Handler:      handler,
+		Handler:      r,
 	}
 
 	if err := s.ListenAndServe(); err != nil {
