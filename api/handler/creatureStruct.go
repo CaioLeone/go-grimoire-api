@@ -3,18 +3,18 @@ package api
 import (
 	"net/http"
 
-	repoApi "github.com/caioleone/go-grimoire-api/api/repository"
+	useApi "github.com/caioleone/go-grimoire-api/api/usecase"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
 
 type CreatureHandler struct {
-	repo repoApi.CreatureRepository
+	useCase *useApi.CreatureUsecase
 }
 
-func NewHandlerCreature(repo repoApi.CreatureRepository) http.Handler {
+func NewHandlerCreature(u *useApi.CreatureUsecase) http.Handler {
 	h := &CreatureHandler{
-		repo: repo,
+		useCase: u,
 	}
 
 	r := chi.NewMux()

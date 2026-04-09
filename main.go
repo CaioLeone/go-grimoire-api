@@ -7,6 +7,7 @@ import (
 
 	handlerApi "github.com/caioleone/go-grimoire-api/api/handler"
 	repoApi "github.com/caioleone/go-grimoire-api/api/repository"
+	useApi "github.com/caioleone/go-grimoire-api/api/usecase"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -24,9 +25,13 @@ func run() error {
 	repoSpell := repoApi.NewMemoryRepositorySpell()
 	repoCreature := repoApi.NewMemoryRepositoryCreature()
 
+	//USECASES
+	spellUsecase := useApi.NewSpellUseCase(repoSpell)
+	creatureUsecase := useApi.NewCreatureUseCase(repoCreature)
+
 	//HANDLERS
-	spellHandler := handlerApi.NewHandlerSpell(repoSpell)
-	creatureHandler := handlerApi.NewHandlerCreature(repoCreature)
+	spellHandler := handlerApi.NewHandlerSpell(spellUsecase)
+	creatureHandler := handlerApi.NewHandlerCreature(creatureUsecase)
 
 	r := chi.NewMux()
 
