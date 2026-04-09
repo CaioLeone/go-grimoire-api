@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log/slog"
 	"net/http"
 	"time"
 
@@ -10,7 +11,11 @@ import (
 )
 
 func main() {
-
+	if err := run(); err != nil {
+		slog.Error("Failed to execute code", "error", err)
+		return
+	}
+	slog.Info("All Systems Offline")
 }
 
 func run() error {
