@@ -46,6 +46,8 @@ func run() error {
 		Handler:      r,
 	}
 
+	slog.Info("Server started", "port", s.Addr)
+
 	if err := s.ListenAndServe(); err != nil {
 		return err
 	}
