@@ -29,7 +29,7 @@ func NewHandlerSpell(u *useApi.SpellUsecase) http.Handler {
 		r.Get("/", h.handleGetSpell)
 		r.Get("/{id}", h.handleGetByIdSpell)
 		r.Put("/{id}", h.handleUpdateSpell)
-		r.Delete("{id}", h.handleDeleteSpell)
+		r.Delete("/{id}", h.handleDeleteSpell)
 	})
 
 	return r
