@@ -35,8 +35,8 @@ func run() error {
 
 	r := chi.NewMux()
 
-	r.Mount("/", spellHandler)
-	r.Mount("/", creatureHandler)
+	r.Mount("/api/spell", spellHandler)
+	r.Mount("/api/creature", creatureHandler)
 
 	s := http.Server{
 		ReadTimeout:  10 * time.Second,

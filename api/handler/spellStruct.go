@@ -24,7 +24,7 @@ func NewHandlerSpell(u *useApi.SpellUsecase) http.Handler {
 	r.Use(middleware.Logger)
 
 	//Spell Route
-	r.Route("/api/spell", func(r chi.Router) {
+	r.Route("/", func(r chi.Router) {
 		r.Post("/", h.handleCreateSpell)
 		r.Get("/", h.handleGetSpell)
 		r.Get("/{id}", h.handleGetByIdSpell)
