@@ -27,7 +27,7 @@ func run() error {
 
 	//USECASES
 	spellUsecase := useApi.NewSpellUseCase(repoSpell)
-	creatureUsecase := useApi.NewCreatureUseCase(repoCreature)
+	creatureUsecase := useApi.NewCreatureUseCase(repoCreature, repoSpell)
 
 	//HANDLERS
 	spellHandler := handlerApi.NewHandlerSpell(spellUsecase)

@@ -46,6 +46,7 @@ func (h *CreatureHandler) handleGetByIdCreature(w http.ResponseWriter, r *http.R
 	creature, ok := h.useCase.GetById(id)
 	if !ok {
 		SendJson(w, Response{Error: "Creature Not Found"}, http.StatusNotFound)
+		return
 	}
 	SendJson(w, Response{Data: creature}, http.StatusOK)
 
@@ -91,4 +92,29 @@ func (h *CreatureHandler) handleDeleteCreature(w http.ResponseWriter, r *http.Re
 
 	SendJson(w, Response{Data: deleted}, http.StatusOK)
 
+}
+
+func (h *CreatureHandler) handleTeachSpell(w http.ResponseWriter, r *http.Request) {
+	creatureIdStr := chi.URLParam(r, "id")
+	spellIdStr := chi.URLParam(r, "spellId")
+
+	creatureId, err := uuid.Parse(creatureIdStr)
+	if err != nil {
+		SendJson(w, Response{Error: "Invalid Creature ID"}, http.StatusBadRequest)
+		return
+	}
+
+	spellId, err := uuid.Parse(spellIdStr)
+	if err != nil {
+		SendJson(w, Response{Error: "Invalid Spell ID"}, http.StatusBadRequest)
+		return
+	}
+
+	err = h.useCase.TeachSpell(creatureId, spellId)
+	if err != nil {
+		SendJson(w, Response{Error: err.Error()}, http.StatusBadRequest)
+		return
+	}
+
+	SendJson(w, Response{Data: "Spell taught Succesfully"}, http.StatusOK)
 }

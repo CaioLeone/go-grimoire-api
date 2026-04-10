@@ -26,9 +26,10 @@ func NewHandlerCreature(u *useApi.CreatureUsecase) http.Handler {
 	//Creature Route
 	r.Route("/api/creature", func(r chi.Router) {
 		r.Post("/", h.handleCreateCreature)
+		r.Post("/{id}/teach/{spellId}", h.handleTeachSpell)
 		r.Get("/", h.handleGetAllCreature)
 		r.Get("/{id}", h.handleGetByIdCreature)
-		r.Put("{id}", h.handleUpdateCreature)
+		r.Put("/{id}", h.handleUpdateCreature)
 		r.Delete("/{id}", h.handleDeleteCreature)
 	})
 	return r

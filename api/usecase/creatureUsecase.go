@@ -9,11 +9,15 @@ import (
 )
 
 type CreatureUsecase struct {
-	repo repoApi.CreatureRepository
+	creatureRepo repoApi.CreatureRepository
+	spellRepo    repoApi.SpellRepository
 }
 
-func NewCreatureUseCase(repo repoApi.CreatureRepository) *CreatureUsecase {
-	return &CreatureUsecase{repo: repo}
+func NewCreatureUseCase(creatureRepo repoApi.CreatureRepository, spellRepo repoApi.SpellRepository) *CreatureUsecase {
+	return &CreatureUsecase{
+		creatureRepo: creatureRepo,
+		spellRepo:    spellRepo,
+	}
 }
 
 func (u *CreatureUsecase) CreateCreature(creature domApi.CreatureModel) (domApi.CreatureModel, error) {
@@ -24,36 +28,70 @@ func (u *CreatureUsecase) CreateCreature(creature domApi.CreatureModel) (domApi.
 	}
 
 	if len(creature.Description) < 2 {
-		return domApi.CreatureModel{}, errors.New("Invalid Name")
+		return domApi.CreatureModel{}, errors.New("Invalid Description")
 	}
 
 	if creature.Attack <= 0 {
-		return domApi.CreatureModel{}, errors.New("Invalid Name")
+		return domApi.CreatureModel{}, errors.New("Invalid Attack")
 	}
 
 	if creature.Defence <= 0 {
-		return domApi.CreatureModel{}, errors.New("Invalid Name")
+		return domApi.CreatureModel{}, errors.New("Invalid Defence")
 	}
 
 	if creature.Hp <= 0 {
-		return domApi.CreatureModel{}, errors.New("Invalid Name")
+		return domApi.CreatureModel{}, errors.New("Invalid Hp")
 	}
 
-	return u.repo.Insert(creature), nil
+	return u.creatureRepo.Insert(creature), nil
 }
 
 func (u *CreatureUsecase) GetAll() []domApi.CreatureModel {
-	return u.repo.FindAll()
+	return u.creatureRepo.FindAll()
 }
 
 func (u *CreatureUsecase) GetById(id uuid.UUID) (domApi.CreatureModel, bool) {
-	return u.repo.FindById(id)
+	return u.creatureRepo.FindById(id)
 }
 
 func (u *CreatureUsecase) Update(id uuid.UUID, s domApi.CreatureModel) (domApi.CreatureModel, bool) {
-	return u.repo.Update(id, s)
+	return u.creatureRepo.Update(id, s)
 }
 
 func (u *CreatureUsecase) Delete(id uuid.UUID) (domApi.CreatureModel, bool) {
-	return u.repo.Delete(id)
+	return u.creatureRepo.Delete(id)
+}
+
+// Teach Spell
+func (u *CreatureUsecase) TeachSpell(creatureID, spellID uuid.UUID) error {
+	//busca creature que ensina
+	creature, ok := u.creatureRepo.FindById(creatureID)
+	if !ok {
+		return errors.New("Creature not found")
+	}
+
+	//Valida se spell existe
+	_, ok = u.spellRepo.FindById(spellID)
+	if !ok {
+		return errors.New("Spell Not Found")
+	}
+
+	//Evita duplicacao
+	for _, s := range creature.Spells {
+		if s == spellID {
+			return errors.New("Spell already taught by this creature")
+		}
+	}
+
+	//Adiciona spell
+	creature.Spells = append(creature.Spells, spellID)
+
+	if len(creature.Spells) > 3 {
+		return errors.New("Creature can only teach 3 spells")
+	}
+
+	//Salva
+	_, _ = u.creatureRepo.Update(creatureID, creature)
+
+	return nil
 }
