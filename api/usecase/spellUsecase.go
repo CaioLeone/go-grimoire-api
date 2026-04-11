@@ -18,7 +18,7 @@ func NewSpellUseCase(repo repoApi.SpellRepository) *SpellUsecase {
 
 func (u *SpellUsecase) CreateSpell(spell domApi.SpellModel) (domApi.SpellModel, error) {
 
-	if len(spell.Name) < 2 {
+	if len(spell.Name) <= 2 {
 		return domApi.SpellModel{}, errors.New("Invalid Name")
 	}
 
