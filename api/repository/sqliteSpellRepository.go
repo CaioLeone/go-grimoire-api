@@ -52,7 +52,66 @@ func (r *SQLiteSpellRepository) FindAll() []domApi.SpellModel {
 
 	return spells
 }
-func (r *SQLiteSpellRepository) FindById(id uuid.UUID) (domApi.SpellModel, bool) {}
-func (r *SQLiteSpellRepository) Update(id uuid.UUID, spell domApi.SpellModel) (domApi.SpellModel, bool) {
+func (r *SQLiteSpellRepository) FindById(id uuid.UUID) (domApi.SpellModel, bool) {
+	query := `SELECT id, name, description, manacost, element FROM spells WHERE id = ?`
+
+	row := r.db.QueryRow(query, id.String())
+
+	var spell domApi.SpellModel
+	var idStr string
+
+	err := row.Scan(
+		&idStr,
+		&spell.Name,
+		&spell.Description,
+		&spell.Element,
+		&spell.ManaCost,
+	)
+	if err != nil {
+		return domApi.SpellModel{}, false
+	}
+	spell.ID, _ = uuid.Parse(idStr)
+
+	return spell, true
 }
-func (r *SQLiteSpellRepository) Delete(id uuid.UUID) (domApi.SpellModel, bool) {}
+
+func (r *SQLiteSpellRepository) Update(id uuid.UUID, spell domApi.SpellModel) (domApi.SpellModel, bool) {
+	query := `UPDATE spells SET name = ?, description = ?, element = ?, manacost = ? WHERE id = ?`
+	result, err := r.db.Exec(
+		query,
+		spell.Name,
+		spell.Description,
+		spell.Element,
+		spell.ManaCost,
+		id.String(),
+	)
+	if err != nil {
+		return domApi.SpellModel{}, false
+	}
+
+	rowsAffected, _ := result.RowsAffected()
+
+	if rowsAffected == 0 {
+		return domApi.SpellModel{}, false
+	}
+
+	spell.ID = id
+
+	return spell, true
+}
+
+func (r *SQLiteSpellRepository) Delete(id uuid.UUID) (domApi.SpellModel, bool) {
+	spell, ok := r.FindById(id)
+	if !ok {
+		return domApi.SpellModel{}, false
+	}
+
+	query := `DELETE FROM spell WHERE id = ?`
+
+	_, err := r.db.Exec(query, id.String())
+	if err != nil {
+		return domApi.SpellModel{}, false
+	}
+
+	return spell, true
+}
