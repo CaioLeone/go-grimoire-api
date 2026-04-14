@@ -52,3 +52,7 @@ func (r *SQLiteSpellRepository) FindAll() []domApi.SpellModel {
 
 	return spells
 }
+func (r *SQLiteSpellRepository) FindById(id uuid.UUID) (domApi.SpellModel, bool) {}
+func (r *SQLiteSpellRepository) Update(id uuid.UUID, spell domApi.SpellModel) (domApi.SpellModel, bool) {
+}
+func (r *SQLiteSpellRepository) Delete(id uuid.UUID) (domApi.SpellModel, bool) {}

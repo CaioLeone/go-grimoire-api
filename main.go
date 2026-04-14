@@ -22,8 +22,19 @@ func main() {
 func run() error {
 
 	//REPOS
-	repoSpell := repoApi.NewMemoryRepositorySpell()
-	repoCreature := repoApi.NewMemoryRepositoryCreature()
+	//repoSpell := repoApi.NewMemoryRepositorySpell()
+	//repoCreature := repoApi.NewMemoryRepositoryCreature()
+	
+	db, err := repoApi.NewSQLiteConnection()
+	if err != nil {
+		return err
+	}
+	if err := repoApi.InitDB(db); err != nil {
+		return err
+	}
+
+	repoSpell := repoApi.NewSQLiteSpellRepository(db)
+	repoCreature := repoApi.NewSQLiteCreatureRepository(db)
 
 	//USECASES
 	spellUsecase := useApi.NewSpellUseCase(repoSpell)
