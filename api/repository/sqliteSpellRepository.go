@@ -53,7 +53,7 @@ func (r *SQLiteSpellRepository) FindAll() []domApi.SpellModel {
 	return spells
 }
 func (r *SQLiteSpellRepository) FindById(id uuid.UUID) (domApi.SpellModel, bool) {
-	query := `SELECT id, name, description, manacost, element FROM spells WHERE id = ?`
+	query := `SELECT id, name, description, mana_cost, element FROM spells WHERE id = ?`
 
 	row := r.db.QueryRow(query, id.String())
 
@@ -76,7 +76,7 @@ func (r *SQLiteSpellRepository) FindById(id uuid.UUID) (domApi.SpellModel, bool)
 }
 
 func (r *SQLiteSpellRepository) Update(id uuid.UUID, spell domApi.SpellModel) (domApi.SpellModel, bool) {
-	query := `UPDATE spells SET name = ?, description = ?, element = ?, manacost = ? WHERE id = ?`
+	query := `UPDATE spells SET name = ?, description = ?, element = ?, mana_cost = ? WHERE id = ?`
 	result, err := r.db.Exec(
 		query,
 		spell.Name,
@@ -106,7 +106,7 @@ func (r *SQLiteSpellRepository) Delete(id uuid.UUID) (domApi.SpellModel, bool) {
 		return domApi.SpellModel{}, false
 	}
 
-	query := `DELETE FROM spell WHERE id = ?`
+	query := `DELETE FROM spells WHERE id = ?`
 
 	_, err := r.db.Exec(query, id.String())
 	if err != nil {
