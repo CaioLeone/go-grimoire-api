@@ -53,7 +53,7 @@ func (r *SQLiteSpellRepository) FindAll() []domApi.SpellModel {
 	return spells
 }
 func (r *SQLiteSpellRepository) FindById(id uuid.UUID) (domApi.SpellModel, bool) {
-	query := `SELECT id, name, description, mana_cost, element FROM spells WHERE id = ?`
+	query := `SELECT id, name, description, element, mana_cost FROM spells WHERE id = ?`
 
 	row := r.db.QueryRow(query, id.String())
 
