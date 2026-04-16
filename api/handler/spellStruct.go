@@ -31,7 +31,6 @@ func NewHandlerSpell(u *useApi.SpellUsecase) http.Handler {
 		r.Get("/element/{element}", h.handleGetByElement)
 		r.Put("/{id}", h.handleUpdateSpell)
 		r.Delete("/{id}", h.handleDeleteSpell)
-
 	})
 
 	return r

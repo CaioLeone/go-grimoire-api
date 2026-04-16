@@ -116,7 +116,7 @@ func (r *SQLiteSpellRepository) Delete(id uuid.UUID) (domApi.SpellModel, bool) {
 	return spell, true
 }
 
-func (r *SQLiteCreatureRepository) FindByElement(element string) []domApi.SpellModel {
+func (r *SQLiteSpellRepository) FindByElement(element string) []domApi.SpellModel {
 	query := `
 		SELECT id, name, description, element, mana_cost 
 		FROM spells
