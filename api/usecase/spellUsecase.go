@@ -44,3 +44,17 @@ func (u *SpellUsecase) Update(id uuid.UUID, s domApi.SpellModel) (domApi.SpellMo
 func (u *SpellUsecase) Delete(id uuid.UUID) (domApi.SpellModel, bool) {
 	return u.repo.Delete(id)
 }
+
+func (u *SpellUsecase) GetByElement(element string) ([]domApi.SpellModel, error) {
+	if len(element) < 2 {
+		return nil, errors.New("Invalid Element")
+	}
+
+	spells := u.repo.FindByElement(element)
+
+	if len(spells) == 0 {
+		return nil, errors.New("No Spells Found For This Element")
+	}
+
+	return spells, nil
+}

@@ -98,3 +98,15 @@ func (h *SpellHandler) handleDeleteSpell(w http.ResponseWriter, r *http.Request)
 	SendJson(w, Response{Data: deleted}, http.StatusOK)
 
 }
+
+func (h *SpellHandler) handleGetByElement(w http.ResponseWriter, r *http.Request) {
+	element := chi.URLParam(r, "element")
+
+	spells, err := h.useCase.GetByElement(element)
+	if err != nil {
+		SendJson(w, Response{Error: err.Error()}, http.StatusBadRequest)
+		return
+	}
+
+	SendJson(w, Response{Data: spells}, http.StatusOK)
+}

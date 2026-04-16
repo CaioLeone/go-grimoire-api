@@ -115,3 +115,41 @@ func (r *SQLiteSpellRepository) Delete(id uuid.UUID) (domApi.SpellModel, bool) {
 
 	return spell, true
 }
+
+func (r *SQLiteCreatureRepository) FindByElement(element string) []domApi.SpellModel {
+	query := `
+		SELECT id, name, description, element, mana_cost 
+		FROM spells
+		WHERE LOWER(element) = LOWER(?)
+	`
+	rows, err := r.db.Query(query, element)
+	if err != nil {
+		return []domApi.SpellModel{}
+	}
+
+	defer rows.Close()
+
+	var spells []domApi.SpellModel
+
+	for rows.Next() {
+		var s domApi.SpellModel
+		var id string
+
+		err := rows.Scan(
+			&id,
+			&s.Name,
+			&s.Description,
+			&s.Element,
+			&s.ManaCost,
+		)
+
+		if err != nil {
+			continue
+		}
+
+		s.ID, _ = uuid.Parse(id)
+		spells = append(spells, s)
+	}
+
+	return spells
+}

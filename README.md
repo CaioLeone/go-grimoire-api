@@ -218,8 +218,8 @@ Você deve implementar:
 
 Se quiser evoluir depois:
 
-Filtros (ex: magias por elemento)
-Relacionamento (criatura possui magias)
-Paginação
-Autenticação JWT
-Deploy (Railway, Render)
+- [X] Filtros (ex: magias por elemento)
+- [X] Relacionamento (criatura possui magias)
+- [X] SQLite
+- [ ] Paginação
+- [ ] Deploy (Vercel)

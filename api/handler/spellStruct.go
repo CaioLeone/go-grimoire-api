@@ -28,8 +28,10 @@ func NewHandlerSpell(u *useApi.SpellUsecase) http.Handler {
 		r.Post("/", h.handleCreateSpell)
 		r.Get("/", h.handleGetSpell)
 		r.Get("/{id}", h.handleGetByIdSpell)
+		r.Get("/element/{element}", h.handleGetByElement)
 		r.Put("/{id}", h.handleUpdateSpell)
 		r.Delete("/{id}", h.handleDeleteSpell)
+
 	})
 
 	return r

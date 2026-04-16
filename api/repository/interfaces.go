@@ -11,6 +11,7 @@ type CreatureRepository interface {
 	Insert(creature domainApi.CreatureModel) domainApi.CreatureModel
 	Update(id uuid.UUID, creature domainApi.CreatureModel) (domainApi.CreatureModel, bool)
 	Delete(id uuid.UUID) (domainApi.CreatureModel, bool)
+
 	TeachSpell(creatureID, spellID uuid.UUID) error
 }
 
@@ -20,4 +21,6 @@ type SpellRepository interface {
 	Insert(spell domainApi.SpellModel) domainApi.SpellModel
 	Update(id uuid.UUID, spell domainApi.SpellModel) (domainApi.SpellModel, bool)
 	Delete(id uuid.UUID) (domainApi.SpellModel, bool)
+
+	FindByElement(element string) []domainApi.SpellModel
 }
