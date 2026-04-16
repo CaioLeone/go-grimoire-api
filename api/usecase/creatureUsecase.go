@@ -64,34 +64,17 @@ func (u *CreatureUsecase) Delete(id uuid.UUID) (domApi.CreatureModel, bool) {
 
 // Teach Spell
 func (u *CreatureUsecase) TeachSpell(creatureID, spellID uuid.UUID) error {
-	//busca creature que ensina
-	creature, ok := u.creatureRepo.FindById(creatureID)
+	//VALIDA CREATURE
+	_, ok := u.creatureRepo.FindById(creatureID)
 	if !ok {
-		return errors.New("Creature not found")
+		return errors.New("Creature Not Found")
 	}
 
-	//Valida se spell existe
+	//VALIDA SPELL
 	_, ok = u.spellRepo.FindById(spellID)
 	if !ok {
 		return errors.New("Spell Not Found")
 	}
 
-	//Evita duplicacao
-	for _, s := range creature.Spells {
-		if s == spellID {
-			return errors.New("Spell already taught by this creature")
-		}
-	}
-
-	//Adiciona spell
-	creature.Spells = append(creature.Spells, spellID)
-
-	if len(creature.Spells) > 3 {
-		return errors.New("Creature can only teach 3 spells")
-	}
-
-	//Salva
-	_, _ = u.creatureRepo.Update(creatureID, creature)
-
-	return nil
+	return u.creatureRepo.TeachSpell(creatureID, spellID)
 }
