@@ -221,5 +221,5 @@ Se quiser evoluir depois:
 - [X] Filtros (ex: magias por elemento)
 - [X] Relacionamento (criatura possui magias)
 - [X] SQLite
-- [ ] Paginação
+- [X] Paginação
 - [ ] Deploy (Vercel)
