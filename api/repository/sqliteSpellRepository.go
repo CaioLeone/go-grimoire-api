@@ -153,3 +153,41 @@ func (r *SQLiteSpellRepository) FindByElement(element string) []domApi.SpellMode
 
 	return spells
 }
+
+func (r *SQLiteSpellRepository) FindAllPaginated(limit, offset int) []domApi.SpellModel {
+	query := `
+		SELECT id, name, description, element, mana_cost 
+		FROM spells
+		LIMIT ? OFFSET ?
+	`
+	rows, err := r.db.Query(query, limit, offset)
+	if err != nil {
+		return []domApi.SpellModel{}
+	}
+
+	defer rows.Close()
+
+	var spells []domApi.SpellModel
+
+	for rows.Next() {
+		var s domApi.SpellModel
+		var id string
+
+		err := rows.Scan(
+			&id,
+			&s.Name,
+			&s.Description,
+			&s.Element,
+			&s.ManaCost,
+		)
+
+		if err != nil {
+			continue
+		}
+
+		s.ID, _ = uuid.Parse(id)
+		spells = append(spells, s)
+	}
+
+	return spells
+}

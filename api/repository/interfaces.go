@@ -13,6 +13,9 @@ type CreatureRepository interface {
 	Delete(id uuid.UUID) (domainApi.CreatureModel, bool)
 
 	TeachSpell(creatureID, spellID uuid.UUID) error
+
+	//Pagination
+	FindAllPaginated(limit, offset int) []domainApi.CreatureModel
 }
 
 type SpellRepository interface {
@@ -23,4 +26,7 @@ type SpellRepository interface {
 	Delete(id uuid.UUID) (domainApi.SpellModel, bool)
 
 	FindByElement(element string) []domainApi.SpellModel
+
+	//Pagination
+	FindAllPaginated(limit, offset int) []domainApi.SpellModel
 }

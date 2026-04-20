@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -29,8 +30,17 @@ func (h *SpellHandler) handleCreateSpell(w http.ResponseWriter, r *http.Request)
 }
 
 func (h *SpellHandler) handleGetSpell(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query()
 
-	spells := h.useCase.GetAll()
+	pageStr := query.Get("page")
+	limitStr := query.Get("limit")
+
+	page, _ := strconv.Atoi(pageStr)
+	limit, _ := strconv.Atoi(limitStr)
+
+	spells := h.useCase.GetPaginated(page, limit)
+
+	//spells := h.useCase.GetAll()
 	SendJson(w, Response{Data: spells}, http.StatusOK)
 
 }

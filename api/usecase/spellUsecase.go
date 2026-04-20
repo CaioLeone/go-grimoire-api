@@ -58,3 +58,17 @@ func (u *SpellUsecase) GetByElement(element string) ([]domApi.SpellModel, error)
 
 	return spells, nil
 }
+
+func (u *SpellUsecase) GetPaginated(page, limit int) []domApi.SpellModel {
+	if page <= 0 {
+		page = 1
+	}
+
+	if limit <= 0 || limit > 100 {
+		limit = 10
+	}
+
+	offset := (page - 1) * limit
+
+	return u.repo.FindAllPaginated(limit, offset)
+}
