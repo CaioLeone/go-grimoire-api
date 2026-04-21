@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -29,8 +30,18 @@ func (h *CreatureHandler) handleCreateCreature(w http.ResponseWriter, r *http.Re
 }
 
 func (h *CreatureHandler) handleGetAllCreature(w http.ResponseWriter, r *http.Request) {
-	creature := h.useCase.GetAll()
-	SendJson(w, Response{Data: creature}, http.StatusOK)
+	query := r.URL.Query()
+
+	pageStr := query.Get("page")
+	limitStr := query.Get("limit")
+
+	page, _ := strconv.Atoi(pageStr)
+	limit, _ := strconv.Atoi(limitStr)
+
+	creatures := h.useCase.GetPaginated(page, limit)
+
+	//creatures := h.useCase.GetAll()
+	SendJson(w, Response{Data: creatures}, http.StatusOK)
 
 }
 

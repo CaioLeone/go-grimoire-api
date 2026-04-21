@@ -78,3 +78,17 @@ func (u *CreatureUsecase) TeachSpell(creatureID, spellID uuid.UUID) error {
 
 	return u.creatureRepo.TeachSpell(creatureID, spellID)
 }
+
+func (u *CreatureUsecase) GetPaginated(page, limit int) []domApi.CreatureModel {
+	if page <= 0 {
+		page = 1
+	}
+
+	if limit <= 0 || limit > 100 {
+		limit = 10
+	}
+
+	offset := (page - 1) * limit
+
+	return u.creatureRepo.FindAllPaginated(limit, offset)
+}

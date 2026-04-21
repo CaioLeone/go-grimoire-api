@@ -189,3 +189,40 @@ func (r *SQLiteCreatureRepository) TeachSpell(creatureID, spellID uuid.UUID) err
 
 	return nil
 }
+
+func (r *SQLiteCreatureRepository) FindAllPaginated(limit, offset int) []domApi.CreatureModel {
+	query := `
+		SELECT id, name, attack, defence, hp, spells
+		FROM creatures
+		LIMIT ? OFFSET ?
+	`
+	rows, err := r.db.Query(query, limit, offset)
+	if err != nil {
+		return []domApi.CreatureModel{}
+	}
+
+	var creatures []domApi.CreatureModel
+
+	for rows.Next() {
+		var c domApi.CreatureModel
+		var id string
+
+		err := rows.Scan(
+			&id,
+			&c.Name,
+			&c.Description,
+			&c.Attack,
+			&c.Defence,
+			&c.Hp,
+			&c.Spells,
+		)
+
+		if err != nil {
+			continue
+		}
+
+		c.ID, _ = uuid.Parse(id)
+		creatures = append(creatures, c)
+	}
+	return creatures
+}
