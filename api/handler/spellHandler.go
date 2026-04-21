@@ -32,6 +32,7 @@ func (h *SpellHandler) handleCreateSpell(w http.ResponseWriter, r *http.Request)
 func (h *SpellHandler) handleGetSpell(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
 
+	name := query.Get("name")
 	element := query.Get("element")
 	sort := query.Get("sort")
 	order := query.Get("order")
@@ -39,7 +40,7 @@ func (h *SpellHandler) handleGetSpell(w http.ResponseWriter, r *http.Request) {
 	page, _ := strconv.Atoi(query.Get("page"))
 	limit, _ := strconv.Atoi(query.Get("limit"))
 
-	spells := h.useCase.GetWithFilters(element, sort, order, page, limit)
+	spells := h.useCase.GetWithFilters(name, element, sort, order, page, limit)
 
 	//spells := h.useCase.GetAll()
 	SendJson(w, Response{Data: spells}, http.StatusOK)

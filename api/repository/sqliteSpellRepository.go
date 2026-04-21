@@ -192,7 +192,7 @@ func (r *SQLiteSpellRepository) FindAllPaginated(limit, offset int) []domApi.Spe
 	return spells
 }
 
-func (r *SQLiteSpellRepository) FindWithFilters(element, sort, order string, limit, offset int) []domApi.SpellModel {
+func (r *SQLiteSpellRepository) FindWithFilters(name, element, sort, order string, limit, offset int) []domApi.SpellModel {
 	query := `
 		SELECT id, name, description, element, mana_cost 
 		FROM spells
@@ -200,6 +200,12 @@ func (r *SQLiteSpellRepository) FindWithFilters(element, sort, order string, lim
 	`
 
 	args := []interface{}{}
+
+	//Filtro Name
+	if name != "" {
+		query += "AND LOWER(name) LIKE LOWER(?)"
+		args = append(args, "%"+name+"%")
+	}
 
 	//Filtro element
 	if element != "" {
