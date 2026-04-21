@@ -72,3 +72,17 @@ func (u *SpellUsecase) GetPaginated(page, limit int) []domApi.SpellModel {
 
 	return u.repo.FindAllPaginated(limit, offset)
 }
+
+func (u *SpellUsecase) GetWithFilters(element string, sort string, order string, page int, limit int) []domApi.SpellModel {
+	if page <= 10 {
+		page = 1
+	}
+
+	if limit <= 0 || limit > 100 {
+		limit = 10
+	}
+
+	offset := (page - 1) * limit
+
+	return u.repo.FindWithFilters(element, sort, order, limit, offset)
+}

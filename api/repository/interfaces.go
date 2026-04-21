@@ -16,6 +16,9 @@ type CreatureRepository interface {
 
 	//Pagination
 	FindAllPaginated(limit, offset int) []domainApi.CreatureModel
+
+	//Filter
+	FindWithFilters(name string, attack int, defence int, sort string, order string, limit, offset int) []domainApi.CreatureModel
 }
 
 type SpellRepository interface {
@@ -29,4 +32,7 @@ type SpellRepository interface {
 
 	//Pagination
 	FindAllPaginated(limit, offset int) []domainApi.SpellModel
+
+	//Filter
+	FindWithFilters(element string, sort string, order string, limit, offset int) []domainApi.SpellModel
 }

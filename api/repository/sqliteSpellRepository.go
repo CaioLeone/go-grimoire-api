@@ -191,3 +191,64 @@ func (r *SQLiteSpellRepository) FindAllPaginated(limit, offset int) []domApi.Spe
 
 	return spells
 }
+
+func (r *SQLiteSpellRepository) FindWithFilters(element, sort, order string, limit, offset int) []domApi.SpellModel {
+	query := `
+		SELECT id, name, description, element, mana_cost 
+		FROM spells
+		WHERE 1=1
+	`
+
+	args := []interface{}{}
+
+	//Filtro element
+	if element != "" {
+		query += "AND LOWER(element) = LOWER(?)"
+		args = append(args, element)
+	}
+
+	//Ordenacao segura
+	validSort := map[string]bool{
+		"name":       true,
+		"mana_costa": true,
+	}
+
+	if validSort[sort] {
+		if order != "desc" {
+			order = "asc"
+		}
+		query += " ORDER BY " + sort + " " + order
+	}
+
+	//Paginacao
+	query += " LIMIT ? OFFSET ?"
+	args = append(args, limit, offset)
+
+	rows, err := r.db.Query(query, args...)
+	if err != nil {
+		return []domApi.SpellModel{}
+	}
+	defer rows.Close()
+
+	var spells []domApi.SpellModel
+
+	for rows.Next() {
+		var s domApi.SpellModel
+		var id string
+		err := rows.Scan(
+			&id,
+			s.Name,
+			&s.Description,
+			&s.Element,
+			&s.ManaCost,
+		)
+		if err != nil {
+			continue
+		}
+
+		s.ID, _ = uuid.Parse(id)
+		spells = append(spells, s)
+	}
+
+	return spells
+}
