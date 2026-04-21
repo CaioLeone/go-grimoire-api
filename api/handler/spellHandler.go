@@ -35,11 +35,7 @@ func (h *SpellHandler) handleGetSpell(w http.ResponseWriter, r *http.Request) {
 	element := query.Get("element")
 	sort := query.Get("sort")
 	order := query.Get("order")
-	//pageStr := query.Get("page")
-	//limitStr := query.Get("limit")
 
-	// page, _ := strconv.Atoi(pageStr)
-	// limit, _ := strconv.Atoi(limitStr)
 	page, _ := strconv.Atoi(query.Get("page"))
 	limit, _ := strconv.Atoi(query.Get("limit"))
 
