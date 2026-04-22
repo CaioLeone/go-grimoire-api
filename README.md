@@ -262,7 +262,7 @@ Todas as respostas de erro devem seguir:
 Se quiser evoluir depois:
 
 - [ ] Swagger
-- [ ] Autenticação
-- [ ] Cache
+- [ ] Autenticação (API Key ou JWT)
+- [ ] Cache (Redis)
 - [ ] Testes Automatizados
-- [ ] Deploy (Vercel)
+- [ ] Deploy (Vercel / Railway / Fly.io)
