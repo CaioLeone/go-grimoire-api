@@ -92,3 +92,17 @@ func (u *CreatureUsecase) GetPaginated(page, limit int) []domApi.CreatureModel {
 
 	return u.creatureRepo.FindAllPaginated(limit, offset)
 }
+
+func (u *CreatureUsecase) GetWithFilters(name string, attack int, defence int, sort string, order string, page int, limit int) []domApi.CreatureModel {
+	if page <= 0 {
+		page = 1
+	}
+
+	if limit <= 0 || limit > 100 {
+		limit = 10
+	}
+
+	offset := (page - 1) * limit
+
+	return u.creatureRepo.FindWithFilters(name, attack, defence, sort, order, limit, offset)
+}

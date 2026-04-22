@@ -192,7 +192,7 @@ func (r *SQLiteCreatureRepository) TeachSpell(creatureID, spellID uuid.UUID) err
 
 func (r *SQLiteCreatureRepository) FindAllPaginated(limit, offset int) []domApi.CreatureModel {
 	query := `
-		SELECT id, name, attack, defence, hp, spells
+		SELECT id, name, description, attack, defence, hp, spells
 		FROM creatures
 		LIMIT ? OFFSET ?
 	`
@@ -224,5 +224,83 @@ func (r *SQLiteCreatureRepository) FindAllPaginated(limit, offset int) []domApi.
 		c.ID, _ = uuid.Parse(id)
 		creatures = append(creatures, c)
 	}
+	return creatures
+}
+
+func (r *SQLiteCreatureRepository) FindWithFilters(name string, attack int, defence int, sort string, order string, limit int, offset int) []domApi.CreatureModel {
+	query := `
+		SELECT id, name, description, attack, defence, hp, spells 
+		FROM creatures
+		WHERE 1=1
+	`
+	args := []interface{}{}
+
+	//BUSCA POR NOME
+	if name != "" {
+		query += " AND LOWER(name) LIKE LOWER(?)"
+		args = append(args, "%"+name+"%")
+	}
+
+	//BUSCA POR ATAQUE
+	if attack != 0 {
+		query += " AND attack = ?"
+		args = append(args, attack)
+	}
+
+	//BUSCA POR ATAQUE
+	if defence != 0 {
+		query += " AND defence = ?"
+		args = append(args, defence)
+	}
+
+	validSort := map[string]bool{
+		"name":    true,
+		"attack":  true,
+		"defence": true,
+		"hp":      true,
+	}
+
+	//ORDENCAO SEGURA
+	if validSort[sort] {
+		if order != "desc" {
+			order = "asc"
+		}
+		query += " ORDER BY " + sort + " " + order
+	}
+
+	//PAGINACAO
+	query += " LIMIT ? OFFSET ?"
+	args = append(args, limit, offset)
+
+	rows, err := r.db.Query(query, args...)
+	if err != nil {
+		return []domApi.CreatureModel{}
+	}
+
+	defer rows.Close()
+
+	var creatures []domApi.CreatureModel
+
+	for rows.Next() {
+		var c domApi.CreatureModel
+		var id string
+
+		err := rows.Scan(
+			&id,
+			&c.Name,
+			&c.Description,
+			&c.Attack,
+			&c.Defence,
+			&c.Hp,
+		)
+
+		if err != nil {
+			continue
+		}
+
+		c.ID, _ = uuid.Parse(id)
+		creatures = append(creatures, c)
+	}
+
 	return creatures
 }
