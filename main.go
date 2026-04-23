@@ -1,5 +1,11 @@
 package main
 
+// @title Grimorio API
+// @version 1.0
+// @description API De Magias e Criaturas
+// @host localhost:8080
+// @BasePath /
+
 import (
 	"log/slog"
 	"net/http"
@@ -24,7 +30,7 @@ func run() error {
 	//REPOS
 	//repoSpell := repoApi.NewMemoryRepositorySpell()
 	//repoCreature := repoApi.NewMemoryRepositoryCreature()
-	
+
 	db, err := repoApi.NewSQLiteConnection()
 	if err != nil {
 		return err
