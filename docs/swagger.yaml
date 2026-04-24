@@ -27,6 +27,34 @@ info:
   version: "1.0"
 paths:
   /api/spell:
+    get:
+      parameters:
+      - description: Elemento da magia
+        in: query
+        name: element
+        type: string
+      - description: Nome da magia
+        in: query
+        name: name
+        type: string
+      - description: Página
+        in: query
+        name: page
+        type: integer
+      - description: Limite
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Lista magias com filtros
+      tags:
+      - spells
     post:
       consumes:
       - application/json

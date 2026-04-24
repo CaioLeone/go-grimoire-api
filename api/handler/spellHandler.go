@@ -39,6 +39,16 @@ func (h *SpellHandler) handleCreateSpell(w http.ResponseWriter, r *http.Request)
 
 }
 
+// GetSpells godoc
+// @Summary Lista magias com filtros
+// @Tags spells
+// @Produce json
+// @Param element query string false "Elemento da magia"
+// @Param name query string false "Nome da magia"
+// @Param page query int false "Página"
+// @Param limit query int false "Limite"
+// @Success 200 {object} Response
+// @Router /api/spell [get]
 func (h *SpellHandler) handleGetSpell(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
 
@@ -57,6 +67,16 @@ func (h *SpellHandler) handleGetSpell(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// GetSpellsById godoc
+// @Summary Lista magias com filtros
+// @Tags spells
+// @Produce json
+// @Param element query string false "Elemento da magia"
+// @Param name query string false "Nome da magia"
+// @Param page query int false "Página"
+// @Param limit query int false "Limite"
+// @Success 200 {object} Response
+// @Router /api/spell [get]
 func (h *SpellHandler) handleGetByIdSpell(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 

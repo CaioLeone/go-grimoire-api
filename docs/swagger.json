@@ -10,6 +10,49 @@
     "basePath": "/",
     "paths": {
         "/api/spell": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "spells"
+                ],
+                "summary": "Lista magias com filtros",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Elemento da magia",
+                        "name": "element",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Nome da magia",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Página",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limite",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Cria uma magia com nome, descrição, elemento e custo de mana",
                 "consumes": [
