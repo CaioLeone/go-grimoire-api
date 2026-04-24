@@ -1,9 +1,55 @@
 basePath: /
+definitions:
+  api.Response:
+    properties:
+      data: {}
+      error:
+        type: string
+    type: object
+  api.SpellModel:
+    properties:
+      description_spell:
+        type: string
+      element:
+        type: string
+      id:
+        type: string
+      mana_cost:
+        type: integer
+      name_spell:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
   description: API De Magias e Criaturas
   title: Grimorio API
   version: "1.0"
-paths: {}
+paths:
+  /api/spell:
+    post:
+      consumes:
+      - application/json
+      description: Cria uma magia com nome, descrição, elemento e custo de mana
+      parameters:
+      - description: Dados da magia
+        in: body
+        name: spell
+        required: true
+        schema:
+          $ref: '#/definitions/api.SpellModel'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Cria uma nova magia
+      tags:
+      - spells
 swagger: "2.0"

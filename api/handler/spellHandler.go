@@ -11,6 +11,16 @@ import (
 	domApi "github.com/caioleone/go-grimoire-api/api/domain"
 )
 
+// CreateSpell godoc
+// @Summary Cria uma nova magia
+// @Description Cria uma magia com nome, descrição, elemento e custo de mana
+// @Tags spells
+// @Accept json
+// @Produce json
+// @Param spell body domApi.SpellModel true "Dados da magia"
+// @Success 201 {object} Response
+// @Failure 400 {object} Response
+// @Router /api/spell [post]
 func (h *SpellHandler) handleCreateSpell(w http.ResponseWriter, r *http.Request) {
 	var spell domApi.SpellModel
 

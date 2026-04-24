@@ -8,5 +8,77 @@
     },
     "host": "localhost:8080",
     "basePath": "/",
-    "paths": {}
+    "paths": {
+        "/api/spell": {
+            "post": {
+                "description": "Cria uma magia com nome, descrição, elemento e custo de mana",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "spells"
+                ],
+                "summary": "Cria uma nova magia",
+                "parameters": [
+                    {
+                        "description": "Dados da magia",
+                        "name": "spell",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.SpellModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api.Response": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.SpellModel": {
+            "type": "object",
+            "properties": {
+                "description_spell": {
+                    "type": "string"
+                },
+                "element": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "mana_cost": {
+                    "type": "integer"
+                },
+                "name_spell": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }

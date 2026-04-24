@@ -14,7 +14,11 @@ import (
 	handlerApi "github.com/caioleone/go-grimoire-api/api/handler"
 	repoApi "github.com/caioleone/go-grimoire-api/api/repository"
 	useApi "github.com/caioleone/go-grimoire-api/api/usecase"
+
 	"github.com/go-chi/chi/v5"
+	httpSwagger "github.com/swaggo/http-swagger"
+
+	_ "github.com/caioleone/go-grimoire-api/docs"
 )
 
 func main() {
@@ -51,6 +55,8 @@ func run() error {
 	creatureHandler := handlerApi.NewHandlerCreature(creatureUsecase)
 
 	r := chi.NewMux()
+
+	r.Get("/swagger/*", httpSwagger.Handler(httpSwagger.URL("http://localhost:8080/swagger/doc.json")))
 
 	r.Mount("/api/spell", spellHandler)
 	r.Mount("/api/creature", creatureHandler)
