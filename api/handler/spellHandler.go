@@ -73,7 +73,7 @@ func (h *SpellHandler) handleGetSpell(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Param id query int false "ID da magia"
 // @Success 200 {object} Response
-// @Router /api/spell [get]
+// @Router /api/spell/{id} [get]
 func (h *SpellHandler) handleGetByIdSpell(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 
@@ -98,7 +98,7 @@ func (h *SpellHandler) handleGetByIdSpell(w http.ResponseWriter, r *http.Request
 // @Produce json
 // @Param id query string false "ID da magia"
 // @Success 200 {object} Response
-// @Router /api/spell [get]
+// @Router /api/spell/{id} [put]
 func (h *SpellHandler) handleUpdateSpell(w http.ResponseWriter, r *http.Request) {
 
 	idStr := chi.URLParam(r, "id")
@@ -131,7 +131,7 @@ func (h *SpellHandler) handleUpdateSpell(w http.ResponseWriter, r *http.Request)
 // @Produce json
 // @Param id query string false "ID da magia"
 // @Success 200 {object} Response
-// @Router /api/spell [get]
+// @Router /api/spell/{id} [delete]
 func (h *SpellHandler) handleDeleteSpell(w http.ResponseWriter, r *http.Request) {
 
 	idStr := chi.URLParam(r, "id")
@@ -152,13 +152,13 @@ func (h *SpellHandler) handleDeleteSpell(w http.ResponseWriter, r *http.Request)
 
 }
 
-// GetSpellsById godoc
+// GetSpellsByElement godoc
 // @Summary Lista magias por elento
 // @Tags spells
 // @Produce json
 // @Param element query string false "Elemento da magia"
 // @Success 200 {object} Response
-// @Router /api/spell [get]
+// @Router /api/spell/element/{element} [get]
 func (h *SpellHandler) handleGetByElement(w http.ResponseWriter, r *http.Request) {
 	element := chi.URLParam(r, "element")
 

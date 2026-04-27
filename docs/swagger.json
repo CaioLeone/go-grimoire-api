@@ -17,30 +17,12 @@
                 "tags": [
                     "spells"
                 ],
-                "summary": "Lista magias com filtros",
+                "summary": "Lista magias por elento",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Elemento da magia",
                         "name": "element",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Nome da magia",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Página",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Limite",
-                        "name": "limit",
                         "in": "query"
                     }
                 ],
