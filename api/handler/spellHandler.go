@@ -43,8 +43,8 @@ func (h *SpellHandler) handleCreateSpell(w http.ResponseWriter, r *http.Request)
 // @Summary Lista magias com filtros
 // @Tags spells
 // @Produce json
-// @Param element query string false "Elemento da magia"
 // @Param name query string false "Nome da magia"
+// @Param element query string false "elemento da magia"
 // @Param page query int false "Página"
 // @Param limit query int false "Limite"
 // @Success 200 {object} Response
@@ -68,13 +68,10 @@ func (h *SpellHandler) handleGetSpell(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetSpellsById godoc
-// @Summary Lista magias com filtros
+// @Summary Lista magias com filtros por ID
 // @Tags spells
 // @Produce json
-// @Param element query string false "Elemento da magia"
-// @Param name query string false "Nome da magia"
-// @Param page query int false "Página"
-// @Param limit query int false "Limite"
+// @Param id query int false "ID da magia"
 // @Success 200 {object} Response
 // @Router /api/spell [get]
 func (h *SpellHandler) handleGetByIdSpell(w http.ResponseWriter, r *http.Request) {
@@ -95,6 +92,13 @@ func (h *SpellHandler) handleGetByIdSpell(w http.ResponseWriter, r *http.Request
 
 }
 
+// UpdateSpells godoc
+// @Summary Atualiza magias
+// @Tags spells
+// @Produce json
+// @Param id query string false "ID da magia"
+// @Success 200 {object} Response
+// @Router /api/spell [get]
 func (h *SpellHandler) handleUpdateSpell(w http.ResponseWriter, r *http.Request) {
 
 	idStr := chi.URLParam(r, "id")
@@ -121,6 +125,13 @@ func (h *SpellHandler) handleUpdateSpell(w http.ResponseWriter, r *http.Request)
 
 }
 
+// DeleteSpells godoc
+// @Summary Deleta magia
+// @Tags spells
+// @Produce json
+// @Param id query string false "ID da magia"
+// @Success 200 {object} Response
+// @Router /api/spell [get]
 func (h *SpellHandler) handleDeleteSpell(w http.ResponseWriter, r *http.Request) {
 
 	idStr := chi.URLParam(r, "id")
@@ -141,6 +152,13 @@ func (h *SpellHandler) handleDeleteSpell(w http.ResponseWriter, r *http.Request)
 
 }
 
+// GetSpellsById godoc
+// @Summary Lista magias por elento
+// @Tags spells
+// @Produce json
+// @Param element query string false "Elemento da magia"
+// @Success 200 {object} Response
+// @Router /api/spell [get]
 func (h *SpellHandler) handleGetByElement(w http.ResponseWriter, r *http.Request) {
 	element := chi.URLParam(r, "element")
 
