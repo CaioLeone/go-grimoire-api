@@ -1,5 +1,24 @@
 basePath: /
 definitions:
+  api.CreatureModel:
+    properties:
+      attack_creature:
+        type: integer
+      defence_creature:
+        type: integer
+      description_creature:
+        type: string
+      hp_creature:
+        type: integer
+      id:
+        type: string
+      name_creature:
+        type: string
+      teach_spell:
+        items:
+          $ref: '#/definitions/api.SpellModel'
+        type: array
+    type: object
   api.Response:
     properties:
       data: {}
@@ -26,6 +45,135 @@ info:
   title: Grimorio API
   version: "1.0"
 paths:
+  /api/creature:
+    get:
+      consumes:
+      - application/json
+      description: Cria uma magia com nome, descrição, elemento e custo de mana
+      parameters:
+      - description: Dados da magia
+        in: body
+        name: spell
+        required: true
+        schema:
+          $ref: '#/definitions/api.SpellModel'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Cria uma nova magia
+      tags:
+      - spells
+    post:
+      consumes:
+      - application/json
+      description: Criatura ensina uma magia
+      parameters:
+      - description: id da criatura
+        in: query
+        name: id
+        type: string
+      - description: id da magia
+        in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Criatura ensina uma nova magia
+      tags:
+      - creatures
+  /api/creature/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Cria uma magia com nome, descrição, elemento e custo de mana
+      parameters:
+      - description: Dados da magia
+        in: body
+        name: spell
+        required: true
+        schema:
+          $ref: '#/definitions/api.SpellModel'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Cria uma nova magia
+      tags:
+      - spells
+    get:
+      consumes:
+      - application/json
+      description: Cria uma magia com nome, descrição, elemento e custo de mana
+      parameters:
+      - description: Dados da magia
+        in: body
+        name: spell
+        required: true
+        schema:
+          $ref: '#/definitions/api.SpellModel'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Cria uma nova magia
+      tags:
+      - spells
+    put:
+      consumes:
+      - application/json
+      description: Cria uma magia com nome, descrição, elemento e custo de mana
+      parameters:
+      - description: Dados da magia
+        in: body
+        name: spell
+        required: true
+        schema:
+          $ref: '#/definitions/api.SpellModel'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Cria uma nova magia
+      tags:
+      - spells
   /api/spell:
     get:
       parameters:
@@ -143,7 +291,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/api.Response'
-      summary: Lista magias por elento
+      summary: Lista magias por elemento
       tags:
       - spells
 swagger: "2.0"

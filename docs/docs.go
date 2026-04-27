@@ -15,6 +15,203 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/creature": {
+            "get": {
+                "description": "Cria uma magia com nome, descrição, elemento e custo de mana",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "spells"
+                ],
+                "summary": "Cria uma nova magia",
+                "parameters": [
+                    {
+                        "description": "Dados da magia",
+                        "name": "spell",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.SpellModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Criatura ensina uma magia",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "creatures"
+                ],
+                "summary": "Criatura ensina uma nova magia",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id da criatura",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id da magia",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/creature/{id}": {
+            "get": {
+                "description": "Cria uma magia com nome, descrição, elemento e custo de mana",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "spells"
+                ],
+                "summary": "Cria uma nova magia",
+                "parameters": [
+                    {
+                        "description": "Dados da magia",
+                        "name": "spell",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.SpellModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Cria uma magia com nome, descrição, elemento e custo de mana",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "spells"
+                ],
+                "summary": "Cria uma nova magia",
+                "parameters": [
+                    {
+                        "description": "Dados da magia",
+                        "name": "spell",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.SpellModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Cria uma magia com nome, descrição, elemento e custo de mana",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "spells"
+                ],
+                "summary": "Cria uma nova magia",
+                "parameters": [
+                    {
+                        "description": "Dados da magia",
+                        "name": "spell",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.SpellModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/spell": {
             "get": {
                 "produces": [
@@ -106,7 +303,7 @@ const docTemplate = `{
                 "tags": [
                     "spells"
                 ],
-                "summary": "Lista magias por elento",
+                "summary": "Lista magias por elemento",
                 "parameters": [
                     {
                         "type": "string",
@@ -204,6 +401,35 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "api.CreatureModel": {
+            "type": "object",
+            "properties": {
+                "attack_creature": {
+                    "type": "integer"
+                },
+                "defence_creature": {
+                    "type": "integer"
+                },
+                "description_creature": {
+                    "type": "string"
+                },
+                "hp_creature": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name_creature": {
+                    "type": "string"
+                },
+                "teach_spell": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.SpellModel"
+                    }
+                }
+            }
+        },
         "api.Response": {
             "type": "object",
             "properties": {
