@@ -47,35 +47,41 @@ info:
 paths:
   /api/creature:
     get:
-      consumes:
-      - application/json
-      description: Lista todas as crituras por nome, descrição, ataque, defesa e magia
+      description: Lista todas as crituras com filtros opcionais e paginação
       parameters:
       - description: nome da criatura
         in: query
         name: name
         type: string
-      - description: ataque da criatura
+      - description: Ataque
         in: query
         name: attack
-        type: string
-      - description: defesa da criatura
+        type: integer
+      - description: Defesa
         in: query
         name: defence
-        type: string
-      - description: sort
+        type: integer
+      - description: Campo de ordenação (name, attack)
         in: query
         name: sort
         type: string
-      - description: order
+      - description: asc ou desc
         in: query
         name: order
         type: string
+      - description: Pagina
+        in: query
+        name: page
+        type: integer
+      - description: limite
+        in: query
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
             $ref: '#/definitions/api.Response'
         "400":
@@ -88,8 +94,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Cria uma criatura com nome, descrição, ataque, defesa, HP e magias
-        que pode ensinar
+      description: Cria uma nova criatura
       parameters:
       - description: Dados da criatura
         in: body
@@ -100,8 +105,8 @@ paths:
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
             $ref: '#/definitions/api.Response'
         "400":
@@ -113,12 +118,10 @@ paths:
       - creatures
   /api/creature/{id}:
     delete:
-      consumes:
-      - application/json
       description: Deleta uma criatura do grimorio
       parameters:
-      - description: id da criatura
-        in: query
+      - description: ID da criatura
+        in: path
         name: id
         type: string
       produces:
@@ -128,20 +131,18 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/api.Response'
-        "400":
-          description: Bad Request
+        "404":
+          description: Not Found
           schema:
             $ref: '#/definitions/api.Response'
       summary: Deleta criatura
       tags:
       - creatures
     get:
-      consumes:
-      - application/json
-      description: Lista criaturas por ID
+      description: Retorna uma criaturas especifica
       parameters:
-      - description: id da criatura
-        in: query
+      - description: ID da criatura
+        in: path
         name: id
         type: string
       produces:
@@ -155,51 +156,63 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/api.Response'
-      summary: Lista criaturas por ID
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Busca criatura por ID
       tags:
       - creatures
     put:
       consumes:
       - application/json
-      description: Atualiza uma magia com nome, descrição, ataque, defesa, hp e magia
+      description: Atualiza dados da criatura
       parameters:
-      - description: id da criatura
-        in: query
+      - description: ID da criatura
+        in: path
         name: id
         type: string
+      - description: Dados Atualizados
+        in: body
+        name: creature
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreatureModel'
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
             $ref: '#/definitions/api.Response'
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/api.Response'
-      summary: Atualiza os dados da criatura
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Atualiza criatura
       tags:
       - creatures
   /api/creature/{id}/teach/{spellId}:
     post:
-      consumes:
-      - application/json
-      description: Criatura ensina uma magia
+      description: Associa uma magina a uma Criatura
       parameters:
-      - description: id da criatura
-        in: query
-        name: id_creature
+      - description: ID da criatura
+        in: path
+        name: id
         type: string
-      - description: id da magia
-        in: query
-        name: id_spell
+      - description: ID da magia
+        in: path
+        name: spellId
         type: string
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
             $ref: '#/definitions/api.Response'
         "400":
@@ -220,6 +233,14 @@ paths:
         in: query
         name: element
         type: string
+      - description: name ou mana_cost
+        in: query
+        name: sort
+        type: string
+      - description: asc ou desc
+        in: query
+        name: order
+        type: string
       - description: Página
         in: query
         name: page
@@ -235,13 +256,17 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
       summary: Lista magias com filtros
       tags:
       - spells
     post:
       consumes:
       - application/json
-      description: Cria uma magia com nome, descrição, elemento e custo de mana
+      description: Cria uma magia
       parameters:
       - description: Dados da magia
         in: body
@@ -265,6 +290,7 @@ paths:
       - spells
   /api/spell/{id}:
     delete:
+      description: Deleta magia do grimorio
       parameters:
       - description: ID da magia
         in: query
@@ -277,13 +303,17 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/api.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.Response'
       summary: Deleta magia
       tags:
       - spells
     get:
       parameters:
       - description: ID da magia
-        in: query
+        in: path
         name: id
         type: integer
       produces:
@@ -293,14 +323,58 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/api.Response'
-      summary: Lista magias com filtros por ID
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Busca magias por ID
       tags:
       - spells
     put:
+      consumes:
+      - application/json
+      description: Atualiza dados da magia
       parameters:
       - description: ID da magia
-        in: query
+        in: path
         name: id
+        required: true
+        type: string
+      - description: Dados Atualizados
+        in: body
+        name: spell
+        required: true
+        schema:
+          $ref: '#/definitions/api.SpellModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/api.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Atualiza magias
+      tags:
+      - spells
+  /api/spell/element/{element}:
+    get:
+      description: Lista magias por elemento
+      parameters:
+      - description: Elemento da magia
+        in: path
+        name: element
         type: string
       produces:
       - application/json
@@ -309,21 +383,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/api.Response'
-      summary: Atualiza magias
-      tags:
-      - spells
-  /api/spell/element/{element}:
-    get:
-      parameters:
-      - description: Elemento da magia
-        in: query
-        name: element
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
+        "400":
+          description: Bad Request
           schema:
             $ref: '#/definitions/api.Response'
       summary: Lista magias por elemento

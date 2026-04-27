@@ -13,7 +13,7 @@ import (
 
 // CreateSpell godoc
 // @Summary Cria uma nova magia
-// @Description Cria uma magia com nome, descrição, elemento e custo de mana
+// @Description Cria uma magia
 // @Tags spells
 // @Accept json
 // @Produce json
@@ -45,9 +45,12 @@ func (h *SpellHandler) handleCreateSpell(w http.ResponseWriter, r *http.Request)
 // @Produce json
 // @Param name query string false "Nome da magia"
 // @Param element query string false "elemento da magia"
+// @Param sort query string false "name ou mana_cost"
+// @Param order query string false "asc ou desc"
 // @Param page query int false "Página"
 // @Param limit query int false "Limite"
 // @Success 200 {object} Response
+// @Failure 400 {object} Response
 // @Router /api/spell [get]
 func (h *SpellHandler) handleGetSpell(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
@@ -68,11 +71,13 @@ func (h *SpellHandler) handleGetSpell(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetSpellsById godoc
-// @Summary Lista magias com filtros por ID
+// @Summary Busca magias por ID
 // @Tags spells
 // @Produce json
-// @Param id query int false "ID da magia"
+// @Param id path int false "ID da magia"
 // @Success 200 {object} Response
+// @Failure 400 {object} Response
+// @Failure 404 {object} Response
 // @Router /api/spell/{id} [get]
 func (h *SpellHandler) handleGetByIdSpell(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
@@ -94,10 +99,15 @@ func (h *SpellHandler) handleGetByIdSpell(w http.ResponseWriter, r *http.Request
 
 // UpdateSpells godoc
 // @Summary Atualiza magias
+// @Description Atualiza dados da magia
 // @Tags spells
+// @Accept json
 // @Produce json
-// @Param id query string false "ID da magia"
+// @Param id path string true "ID da magia"
+// @Param spell body domApi.SpellModel true "Dados Atualizados"
 // @Success 200 {object} Response
+// @Failure 400 {object} Response
+// @Failure 404 {object} Response
 // @Router /api/spell/{id} [put]
 func (h *SpellHandler) handleUpdateSpell(w http.ResponseWriter, r *http.Request) {
 
@@ -127,10 +137,12 @@ func (h *SpellHandler) handleUpdateSpell(w http.ResponseWriter, r *http.Request)
 
 // DeleteSpells godoc
 // @Summary Deleta magia
+// @Description Deleta magia do grimorio
 // @Tags spells
 // @Produce json
 // @Param id query string false "ID da magia"
 // @Success 200 {object} Response
+// @Failure 404 {object} Response
 // @Router /api/spell/{id} [delete]
 func (h *SpellHandler) handleDeleteSpell(w http.ResponseWriter, r *http.Request) {
 
@@ -154,10 +166,12 @@ func (h *SpellHandler) handleDeleteSpell(w http.ResponseWriter, r *http.Request)
 
 // GetSpellsByElement godoc
 // @Summary Lista magias por elemento
+// @Description Lista magias por elemento
 // @Tags spells
 // @Produce json
-// @Param element query string false "Elemento da magia"
+// @Param element path string false "Elemento da magia"
 // @Success 200 {object} Response
+// @Failure 400 {object} Response
 // @Router /api/spell/element/{element} [get]
 func (h *SpellHandler) handleGetByElement(w http.ResponseWriter, r *http.Request) {
 	element := chi.URLParam(r, "element")

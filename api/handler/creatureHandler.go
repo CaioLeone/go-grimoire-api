@@ -49,7 +49,7 @@ func (h *CreatureHandler) handleCreateCreature(w http.ResponseWriter, r *http.Re
 // @Param defence query int false "Defesa"
 // @Param sort query string false "Campo de ordenação (name, attack)"
 // @Param order query string false "asc ou desc"
-// @Param page page query int false "Pagina"
+// @Param page query int false "Pagina"
 // @Param limit query int false "limite"
 // @Success 200 {object} Response
 // @Failure 400 {object} Response
@@ -78,7 +78,7 @@ func (h *CreatureHandler) handleGetAllCreature(w http.ResponseWriter, r *http.Re
 // @Description Retorna uma criaturas especifica
 // @Tags creatures
 // @Produce json
-// @Param id query string false "ID da criatura"
+// @Param id path string false "ID da criatura"
 // @Success 201 {object} Response
 // @Failure 400 {object} Response
 // @Failure 404 {object} Response
@@ -107,7 +107,7 @@ func (h *CreatureHandler) handleGetByIdCreature(w http.ResponseWriter, r *http.R
 // @Tags creatures
 // @Accept json
 // @Produce json
-// @Param id query string false "ID da criatura"
+// @Param id path string false "ID da criatura"
 // @Param creature body domApi.CreatureModel true "Dados Atualizados"
 // @Success 200 {object} Response
 // @Failure 400 {object} Response
@@ -142,7 +142,7 @@ func (h *CreatureHandler) handleUpdateCreature(w http.ResponseWriter, r *http.Re
 // @Description Deleta uma criatura do grimorio
 // @Tags creatures
 // @Produce json
-// @Param id query string false "ID da criatura"
+// @Param id path string false "ID da criatura"
 // @Success 201 {object} Response
 // @Failure 404 {object} Response
 // @Router /api/creature/{id} [delete]
@@ -169,7 +169,7 @@ func (h *CreatureHandler) handleDeleteCreature(w http.ResponseWriter, r *http.Re
 // @Description Associa uma magina a uma Criatura
 // @Tags creatures
 // @Produce json
-// @Param id query string false "ID da criatura"
+// @Param id path string false "ID da criatura"
 // @Param spellId path string false "ID da magia"
 // @Success 200 {object} Response
 // @Failure 400 {object} Response

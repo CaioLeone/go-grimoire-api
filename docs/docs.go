@@ -17,10 +17,7 @@ const docTemplate = `{
     "paths": {
         "/api/creature": {
             "get": {
-                "description": "Lista todas as crituras por nome, descrição, ataque, defesa e magia",
-                "consumes": [
-                    "application/json"
-                ],
+                "description": "Lista todas as crituras com filtros opcionais e paginação",
                 "produces": [
                     "application/json"
                 ],
@@ -36,33 +33,45 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "ataque da criatura",
+                        "type": "integer",
+                        "description": "Ataque",
                         "name": "attack",
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "defesa da criatura",
+                        "type": "integer",
+                        "description": "Defesa",
                         "name": "defence",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "sort",
+                        "description": "Campo de ordenação (name, attack)",
                         "name": "sort",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "order",
+                        "description": "asc ou desc",
                         "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Pagina",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limite",
+                        "name": "limit",
                         "in": "query"
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/api.Response"
                         }
@@ -76,7 +85,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Cria uma criatura com nome, descrição, ataque, defesa, HP e magias que pode ensinar",
+                "description": "Cria uma nova criatura",
                 "consumes": [
                     "application/json"
                 ],
@@ -99,8 +108,8 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/api.Response"
                         }
@@ -116,23 +125,20 @@ const docTemplate = `{
         },
         "/api/creature/{id}": {
             "get": {
-                "description": "Lista criaturas por ID",
-                "consumes": [
-                    "application/json"
-                ],
+                "description": "Retorna uma criaturas especifica",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "creatures"
                 ],
-                "summary": "Lista criaturas por ID",
+                "summary": "Busca criatura por ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "id da criatura",
+                        "description": "ID da criatura",
                         "name": "id",
-                        "in": "query"
+                        "in": "path"
                     }
                 ],
                 "responses": {
@@ -144,6 +150,12 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/api.Response"
                         }
@@ -151,7 +163,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Atualiza uma magia com nome, descrição, ataque, defesa, hp e magia",
+                "description": "Atualiza dados da criatura",
                 "consumes": [
                     "application/json"
                 ],
@@ -161,24 +173,39 @@ const docTemplate = `{
                 "tags": [
                     "creatures"
                 ],
-                "summary": "Atualiza os dados da criatura",
+                "summary": "Atualiza criatura",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "id da criatura",
+                        "description": "ID da criatura",
                         "name": "id",
-                        "in": "query"
+                        "in": "path"
+                    },
+                    {
+                        "description": "Dados Atualizados",
+                        "name": "creature",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.CreatureModel"
+                        }
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/api.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/api.Response"
                         }
@@ -187,9 +214,6 @@ const docTemplate = `{
             },
             "delete": {
                 "description": "Deleta uma criatura do grimorio",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -200,9 +224,9 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "id da criatura",
+                        "description": "ID da criatura",
                         "name": "id",
-                        "in": "query"
+                        "in": "path"
                     }
                 ],
                 "responses": {
@@ -212,8 +236,8 @@ const docTemplate = `{
                             "$ref": "#/definitions/api.Response"
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/api.Response"
                         }
@@ -223,10 +247,7 @@ const docTemplate = `{
         },
         "/api/creature/{id}/teach/{spellId}": {
             "post": {
-                "description": "Criatura ensina uma magia",
-                "consumes": [
-                    "application/json"
-                ],
+                "description": "Associa uma magina a uma Criatura",
                 "produces": [
                     "application/json"
                 ],
@@ -237,20 +258,20 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "id da criatura",
-                        "name": "id_creature",
-                        "in": "query"
+                        "description": "ID da criatura",
+                        "name": "id",
+                        "in": "path"
                     },
                     {
                         "type": "string",
-                        "description": "id da magia",
-                        "name": "id_spell",
-                        "in": "query"
+                        "description": "ID da magia",
+                        "name": "spellId",
+                        "in": "path"
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/api.Response"
                         }
@@ -287,6 +308,18 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "string",
+                        "description": "name ou mana_cost",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "asc ou desc",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "description": "Página",
                         "name": "page",
@@ -305,11 +338,17 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/api.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
                     }
                 }
             },
             "post": {
-                "description": "Cria uma magia com nome, descrição, elemento e custo de mana",
+                "description": "Cria uma magia",
                 "consumes": [
                     "application/json"
                 ],
@@ -349,6 +388,7 @@ const docTemplate = `{
         },
         "/api/spell/element/{element}": {
             "get": {
+                "description": "Lista magias por elemento",
                 "produces": [
                     "application/json"
                 ],
@@ -361,12 +401,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Elemento da magia",
                         "name": "element",
-                        "in": "query"
+                        "in": "path"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/api.Response"
                         }
@@ -382,13 +428,13 @@ const docTemplate = `{
                 "tags": [
                     "spells"
                 ],
-                "summary": "Lista magias com filtros por ID",
+                "summary": "Busca magias por ID",
                 "parameters": [
                     {
                         "type": "integer",
                         "description": "ID da magia",
                         "name": "id",
-                        "in": "query"
+                        "in": "path"
                     }
                 ],
                 "responses": {
@@ -397,10 +443,26 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/api.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
                     }
                 }
             },
             "put": {
+                "description": "Atualiza dados da magia",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -413,7 +475,17 @@ const docTemplate = `{
                         "type": "string",
                         "description": "ID da magia",
                         "name": "id",
-                        "in": "query"
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Dados Atualizados",
+                        "name": "spell",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.SpellModel"
+                        }
                     }
                 ],
                 "responses": {
@@ -422,10 +494,23 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/api.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
                     }
                 }
             },
             "delete": {
+                "description": "Deleta magia do grimorio",
                 "produces": [
                     "application/json"
                 ],
@@ -444,6 +529,12 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/api.Response"
                         }
