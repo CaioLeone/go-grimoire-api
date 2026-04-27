@@ -23,12 +23,30 @@ const docTemplate = `{
                 "tags": [
                     "spells"
                 ],
-                "summary": "Lista magias por elento",
+                "summary": "Lista magias com filtros",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Elemento da magia",
+                        "description": "Nome da magia",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "elemento da magia",
                         "name": "element",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Página",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limite",
+                        "name": "limit",
                         "in": "query"
                     }
                 ],
@@ -73,6 +91,110 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/spell/element/{element}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "spells"
+                ],
+                "summary": "Lista magias por elento",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Elemento da magia",
+                        "name": "element",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/spell/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "spells"
+                ],
+                "summary": "Lista magias com filtros por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID da magia",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "spells"
+                ],
+                "summary": "Atualiza magias",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID da magia",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "spells"
+                ],
+                "summary": "Deleta magia",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID da magia",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/api.Response"
                         }

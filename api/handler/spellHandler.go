@@ -153,7 +153,7 @@ func (h *SpellHandler) handleDeleteSpell(w http.ResponseWriter, r *http.Request)
 }
 
 // GetSpellsByElement godoc
-// @Summary Lista magias por elento
+// @Summary Lista magias por elemento
 // @Tags spells
 // @Produce json
 // @Param element query string false "Elemento da magia"

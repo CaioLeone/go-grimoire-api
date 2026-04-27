@@ -29,10 +29,22 @@ paths:
   /api/spell:
     get:
       parameters:
-      - description: Elemento da magia
+      - description: Nome da magia
+        in: query
+        name: name
+        type: string
+      - description: elemento da magia
         in: query
         name: element
         type: string
+      - description: Página
+        in: query
+        name: page
+        type: integer
+      - description: Limite
+        in: query
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:
@@ -40,7 +52,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/api.Response'
-      summary: Lista magias por elento
+      summary: Lista magias com filtros
       tags:
       - spells
     post:
@@ -66,6 +78,72 @@ paths:
           schema:
             $ref: '#/definitions/api.Response'
       summary: Cria uma nova magia
+      tags:
+      - spells
+  /api/spell/{id}:
+    delete:
+      parameters:
+      - description: ID da magia
+        in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Deleta magia
+      tags:
+      - spells
+    get:
+      parameters:
+      - description: ID da magia
+        in: query
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Lista magias com filtros por ID
+      tags:
+      - spells
+    put:
+      parameters:
+      - description: ID da magia
+        in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Atualiza magias
+      tags:
+      - spells
+  /api/spell/element/{element}:
+    get:
+      parameters:
+      - description: Elemento da magia
+        in: query
+        name: element
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Response'
+      summary: Lista magias por elento
       tags:
       - spells
 swagger: "2.0"
