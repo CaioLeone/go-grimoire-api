@@ -4,10 +4,10 @@ import "github.com/google/uuid"
 
 type CreatureModel struct {
 	ID          uuid.UUID    `json:"id"`
-	Name        string       `json:"name_creature"`
-	Description string       `json:"description_creature"`
-	Hp          int          `json:"hp_creature"`
-	Attack      int          `json:"attack_creature"`
-	Defence     int          `json:"defence_creature"`
+	Name        string       `json:"name"`
+	Description string       `json:"description"`
+	Hp          int          `json:"hp"`
+	Attack      int          `json:"attack"`
+	Defence     int          `json:"defence"`
 	Spells      []SpellModel `json:"teach_spell"`
 }
