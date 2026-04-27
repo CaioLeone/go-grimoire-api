@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/api/creature": {
             "get": {
-                "description": "Cria uma magia com nome, descrição, elemento e custo de mana",
+                "description": "Lista todas as crituras por nome, descrição, ataque, defesa e magia",
                 "consumes": [
                     "application/json"
                 ],
@@ -25,18 +25,39 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "spells"
+                    "creatures"
                 ],
-                "summary": "Cria uma nova magia",
+                "summary": "Lista todas as criaturas",
                 "parameters": [
                     {
-                        "description": "Dados da magia",
-                        "name": "spell",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/api.SpellModel"
-                        }
+                        "type": "string",
+                        "description": "nome da criatura",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "ataque da criatura",
+                        "name": "attack",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "defesa da criatura",
+                        "name": "defence",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sort",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "order",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -55,7 +76,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Criatura ensina uma magia",
+                "description": "Cria uma criatura com nome, descrição, ataque, defesa, HP e magias que pode ensinar",
                 "consumes": [
                     "application/json"
                 ],
@@ -65,19 +86,16 @@ const docTemplate = `{
                 "tags": [
                     "creatures"
                 ],
-                "summary": "Criatura ensina uma nova magia",
+                "summary": "Cria uma criatura",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "id da criatura",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "id da magia",
-                        "name": "id",
-                        "in": "query"
+                        "description": "Dados da criatura",
+                        "name": "creature",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.CreatureModel"
+                        }
                     }
                 ],
                 "responses": {
@@ -98,7 +116,7 @@ const docTemplate = `{
         },
         "/api/creature/{id}": {
             "get": {
-                "description": "Cria uma magia com nome, descrição, elemento e custo de mana",
+                "description": "Lista criaturas por ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -106,18 +124,15 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "spells"
+                    "creatures"
                 ],
-                "summary": "Cria uma nova magia",
+                "summary": "Lista criaturas por ID",
                 "parameters": [
                     {
-                        "description": "Dados da magia",
-                        "name": "spell",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/api.SpellModel"
-                        }
+                        "type": "string",
+                        "description": "id da criatura",
+                        "name": "id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -136,7 +151,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Cria uma magia com nome, descrição, elemento e custo de mana",
+                "description": "Atualiza uma magia com nome, descrição, ataque, defesa, hp e magia",
                 "consumes": [
                     "application/json"
                 ],
@@ -144,18 +159,15 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "spells"
+                    "creatures"
                 ],
-                "summary": "Cria uma nova magia",
+                "summary": "Atualiza os dados da criatura",
                 "parameters": [
                     {
-                        "description": "Dados da magia",
-                        "name": "spell",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/api.SpellModel"
-                        }
+                        "type": "string",
+                        "description": "id da criatura",
+                        "name": "id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -174,7 +186,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Cria uma magia com nome, descrição, elemento e custo de mana",
+                "description": "Deleta uma criatura do grimorio",
                 "consumes": [
                     "application/json"
                 ],
@@ -182,18 +194,58 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "spells"
+                    "creatures"
                 ],
-                "summary": "Cria uma nova magia",
+                "summary": "Deleta criatura",
                 "parameters": [
                     {
-                        "description": "Dados da magia",
-                        "name": "spell",
-                        "in": "body",
-                        "required": true,
+                        "type": "string",
+                        "description": "id da criatura",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/api.SpellModel"
+                            "$ref": "#/definitions/api.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/creature/{id}/teach/{spellId}": {
+            "post": {
+                "description": "Criatura ensina uma magia",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "creatures"
+                ],
+                "summary": "Criatura ensina uma nova magia",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id da criatura",
+                        "name": "id_creature",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id da magia",
+                        "name": "id_spell",
+                        "in": "query"
                     }
                 ],
                 "responses": {

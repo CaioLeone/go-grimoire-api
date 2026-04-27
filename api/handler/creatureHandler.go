@@ -13,12 +13,12 @@ import (
 
 // CreateCreature godoc
 // @Summary Cria uma criatura
-// @Description Cria uma criatura com nome, descrição, ataque, defesa, HP e magias que pode ensinar
+// @Description Cria uma nova criatura
 // @Tags creatures
 // @Accept json
 // @Produce json
 // @Param creature body domApi.CreatureModel true "Dados da criatura"
-// @Success 201 {object} Response
+// @Success 200 {object} Response
 // @Failure 400 {object} Response
 // @Router /api/creature [post]
 func (h *CreatureHandler) handleCreateCreature(w http.ResponseWriter, r *http.Request) {
@@ -41,16 +41,17 @@ func (h *CreatureHandler) handleCreateCreature(w http.ResponseWriter, r *http.Re
 
 // GetAllCreatures godoc
 // @Summary Lista todas as criaturas
-// @Description Lista todas as crituras por nome, descrição, ataque, defesa e magia
+// @Description Lista todas as crituras com filtros opcionais e paginação
 // @Tags creatures
-// @Accept json
 // @Produce json
 // @Param name query string false "nome da criatura"
-// @Param attack query string false "ataque da criatura"
-// @Param defence query string false "defesa da criatura"
-// @Param sort query string false "sort"
-// @Param order query string false "order"
-// @Success 201 {object} Response
+// @Param attack query int false "Ataque"
+// @Param defence query int false "Defesa"
+// @Param sort query string false "Campo de ordenação (name, attack)"
+// @Param order query string false "asc ou desc"
+// @Param page page query int false "Pagina"
+// @Param limit query int false "limite"
+// @Success 200 {object} Response
 // @Failure 400 {object} Response
 // @Router /api/creature [get]
 func (h *CreatureHandler) handleGetAllCreature(w http.ResponseWriter, r *http.Request) {
@@ -73,14 +74,14 @@ func (h *CreatureHandler) handleGetAllCreature(w http.ResponseWriter, r *http.Re
 }
 
 // GetCreatureByID godoc
-// @Summary Lista criaturas por ID
-// @Description Lista criaturas por ID
+// @Summary Busca criatura por ID
+// @Description Retorna uma criaturas especifica
 // @Tags creatures
-// @Accept json
 // @Produce json
-// @Param id query string false "id da criatura"
+// @Param id query string false "ID da criatura"
 // @Success 201 {object} Response
 // @Failure 400 {object} Response
+// @Failure 404 {object} Response
 // @Router /api/creature/{id} [get]
 func (h *CreatureHandler) handleGetByIdCreature(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
@@ -101,14 +102,16 @@ func (h *CreatureHandler) handleGetByIdCreature(w http.ResponseWriter, r *http.R
 }
 
 // UpdateCreature godoc
-// @Summary Atualiza os dados da criatura
-// @Description Atualiza uma magia com nome, descrição, ataque, defesa, hp e magia
+// @Summary Atualiza criatura
+// @Description Atualiza dados da criatura
 // @Tags creatures
 // @Accept json
 // @Produce json
-// @Param id query string false "id da criatura"
-// @Success 201 {object} Response
+// @Param id query string false "ID da criatura"
+// @Param creature body domApi.CreatureModel true "Dados Atualizados"
+// @Success 200 {object} Response
 // @Failure 400 {object} Response
+// @Failure 404 {object} Response
 // @Router /api/creature/{id} [put]
 func (h *CreatureHandler) handleUpdateCreature(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
@@ -134,15 +137,14 @@ func (h *CreatureHandler) handleUpdateCreature(w http.ResponseWriter, r *http.Re
 
 }
 
-// DeleteSpell godoc
+// DeleteCreature godoc
 // @Summary Deleta criatura
 // @Description Deleta uma criatura do grimorio
 // @Tags creatures
-// @Accept json
 // @Produce json
-// @Param id query string false "id da criatura"
+// @Param id query string false "ID da criatura"
 // @Success 201 {object} Response
-// @Failure 400 {object} Response
+// @Failure 404 {object} Response
 // @Router /api/creature/{id} [delete]
 func (h *CreatureHandler) handleDeleteCreature(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
@@ -164,13 +166,12 @@ func (h *CreatureHandler) handleDeleteCreature(w http.ResponseWriter, r *http.Re
 
 // TeachSpell godoc
 // @Summary Criatura ensina uma nova magia
-// @Description Criatura ensina uma magia
+// @Description Associa uma magina a uma Criatura
 // @Tags creatures
-// @Accept json
 // @Produce json
-// @Param id_creature query string false "id da criatura"
-// @Param id_spell query string false "id da magia"
-// @Success 201 {object} Response
+// @Param id query string false "ID da criatura"
+// @Param spellId path string false "ID da magia"
+// @Success 200 {object} Response
 // @Failure 400 {object} Response
 // @Router /api/creature/{id}/teach/{spellId} [post]
 func (h *CreatureHandler) handleTeachSpell(w http.ResponseWriter, r *http.Request) {
