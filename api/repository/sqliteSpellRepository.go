@@ -204,20 +204,20 @@ func (r *SQLiteSpellRepository) FindWithFilters(name, element, sort, order strin
 
 	//Filtro Name
 	if name != "" {
-		query += "AND LOWER(name) LIKE LOWER(?)"
+		query += " AND LOWER(name) LIKE LOWER(?)"
 		args = append(args, "%"+strings.ToLower(name)+"%")
 	}
 
 	//Filtro element
 	if element != "" {
-		query += "AND LOWER(element) = LOWER(?)"
+		query += " AND LOWER(element) = LOWER(?)"
 		args = append(args, element)
 	}
 
 	//Ordenacao segura
 	validSort := map[string]bool{
 		"name":       true,
-		"mana_costa": true,
+		"mana_cost": true,
 	}
 
 	if validSort[sort] {
@@ -244,7 +244,7 @@ func (r *SQLiteSpellRepository) FindWithFilters(name, element, sort, order strin
 		var id string
 		err := rows.Scan(
 			&id,
-			s.Name,
+			&s.Name,
 			&s.Description,
 			&s.Element,
 			&s.ManaCost,

@@ -79,7 +79,7 @@ func (u *SpellUsecase) GetPaginated(page, limit int) []domApi.SpellModel {
 }
 
 func (u *SpellUsecase) GetWithFilters(name string, element string, sort string, order string, page int, limit int) []domApi.SpellModel {
-	if page <= 10 {
+	if page <= 0 {
 		page = 1
 	}
 
