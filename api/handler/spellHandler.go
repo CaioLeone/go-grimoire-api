@@ -75,7 +75,7 @@ func (h *SpellHandler) handleGetSpell(w http.ResponseWriter, r *http.Request) {
 // @Description Usado principalmente para operações internas (update/delete)
 // @Tags spells
 // @Produce json
-// @Param id path int false "ID da magia"
+// @Param id path string false "ID da magia"
 // @Success 200 {object} Response
 // @Failure 400 {object} Response
 // @Failure 404 {object} Response

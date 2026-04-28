@@ -311,6 +311,7 @@ paths:
       tags:
       - spells
     get:
+      description: Usado principalmente para operações internas (update/delete)
       parameters:
       - description: ID da magia
         in: path
@@ -331,7 +332,7 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/api.Response'
-      summary: Busca magias por ID
+      summary: Busca magias por ID (uso Interno)
       tags:
       - spells
     put:
@@ -366,28 +367,6 @@ paths:
           schema:
             $ref: '#/definitions/api.Response'
       summary: Atualiza magias
-      tags:
-      - spells
-  /api/spell/element/{element}:
-    get:
-      description: Lista magias por elemento
-      parameters:
-      - description: Elemento da magia
-        in: path
-        name: element
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/api.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/api.Response'
-      summary: Lista magias por elemento
       tags:
       - spells
 swagger: "2.0"
