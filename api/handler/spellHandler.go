@@ -71,7 +71,8 @@ func (h *SpellHandler) handleGetSpell(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetSpellsById godoc
-// @Summary Busca magias por ID
+// @Summary Busca magias por ID (uso Interno)
+// @Description Usado principalmente para operações internas (update/delete)
 // @Tags spells
 // @Produce json
 // @Param id path int false "ID da magia"
@@ -91,6 +92,7 @@ func (h *SpellHandler) handleGetByIdSpell(w http.ResponseWriter, r *http.Request
 	spell, ok := h.useCase.GetById(id)
 	if !ok {
 		SendJson(w, Response{Error: "Spell Not Found"}, http.StatusBadRequest)
+		return
 	}
 
 	SendJson(w, Response{Data: spell}, http.StatusOK)
@@ -156,7 +158,7 @@ func (h *SpellHandler) handleDeleteSpell(w http.ResponseWriter, r *http.Request)
 
 	deleted, ok := h.useCase.Delete(id)
 	if !ok {
-		SendJson(w, Response{Error: "User Not Found"}, http.StatusNotFound)
+		SendJson(w, Response{Error: "Spell Not Found"}, http.StatusNotFound)
 		return
 	}
 
@@ -173,14 +175,14 @@ func (h *SpellHandler) handleDeleteSpell(w http.ResponseWriter, r *http.Request)
 // @Success 200 {object} Response
 // @Failure 400 {object} Response
 // @Router /api/spell/element/{element} [get]
-func (h *SpellHandler) handleGetByElement(w http.ResponseWriter, r *http.Request) {
-	element := chi.URLParam(r, "element")
+// func (h *SpellHandler) handleGetByElement(w http.ResponseWriter, r *http.Request) {
+// 	element := chi.URLParam(r, "element")
 
-	spells, err := h.useCase.GetByElement(element)
-	if err != nil {
-		SendJson(w, Response{Error: err.Error()}, http.StatusBadRequest)
-		return
-	}
+// 	spells, err := h.useCase.GetByElement(element)
+// 	if err != nil {
+// 		SendJson(w, Response{Error: err.Error()}, http.StatusBadRequest)
+// 		return
+// 	}
 
-	SendJson(w, Response{Data: spells}, http.StatusOK)
-}
+// 	SendJson(w, Response{Data: spells}, http.StatusOK)
+// }

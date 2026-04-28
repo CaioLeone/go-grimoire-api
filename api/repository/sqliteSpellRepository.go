@@ -2,6 +2,7 @@ package api
 
 import (
 	"database/sql"
+	"strings"
 
 	domApi "github.com/caioleone/go-grimoire-api/api/domain"
 	"github.com/google/uuid"
@@ -204,7 +205,7 @@ func (r *SQLiteSpellRepository) FindWithFilters(name, element, sort, order strin
 	//Filtro Name
 	if name != "" {
 		query += "AND LOWER(name) LIKE LOWER(?)"
-		args = append(args, "%"+name+"%")
+		args = append(args, "%"+strings.ToLower(name)+"%")
 	}
 
 	//Filtro element
@@ -257,4 +258,30 @@ func (r *SQLiteSpellRepository) FindWithFilters(name, element, sort, order strin
 	}
 
 	return spells
+}
+
+func (r *SQLiteSpellRepository) FindByName(name string) (domApi.SpellModel, bool) {
+	query := `
+		SELECT id, name, description, element, mana_cost 
+		FROM spells
+		WHERE Lower(name) = LOWER(?)
+	`
+	row := r.db.QueryRow(query, name)
+
+	var spell domApi.SpellModel
+	var id string
+
+	err := row.Scan(
+		&id,
+		&spell.Name,
+		&spell.Description,
+		&spell.Element,
+		&spell.ManaCost,
+	)
+	if err != nil {
+		return domApi.SpellModel{}, false
+	}
+
+	spell.ID, _ = uuid.Parse(id)
+	return spell, true
 }

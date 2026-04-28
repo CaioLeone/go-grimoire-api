@@ -547,22 +547,22 @@ const docTemplate = `{
         "api.CreatureModel": {
             "type": "object",
             "properties": {
-                "attack_creature": {
+                "attack": {
                     "type": "integer"
                 },
-                "defence_creature": {
+                "defence": {
                     "type": "integer"
                 },
-                "description_creature": {
+                "description": {
                     "type": "string"
                 },
-                "hp_creature": {
+                "hp": {
                     "type": "integer"
                 },
                 "id": {
                     "type": "string"
                 },
-                "name_creature": {
+                "name": {
                     "type": "string"
                 },
                 "teach_spell": {
@@ -585,7 +585,7 @@ const docTemplate = `{
         "api.SpellModel": {
             "type": "object",
             "properties": {
-                "description_spell": {
+                "description": {
                     "type": "string"
                 },
                 "element": {
@@ -597,7 +597,7 @@ const docTemplate = `{
                 "mana_cost": {
                     "type": "integer"
                 },
-                "name_spell": {
+                "name": {
                     "type": "string"
                 }
             }
