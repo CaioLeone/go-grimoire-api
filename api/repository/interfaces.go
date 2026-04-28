@@ -29,7 +29,7 @@ type SpellRepository interface {
 	Update(id uuid.UUID, spell domainApi.SpellModel) (domainApi.SpellModel, bool)
 	Delete(id uuid.UUID) (domainApi.SpellModel, bool)
 
-	//FindByElement(element string) []domainApi.SpellModel
+	FindByElement(element string) []domainApi.SpellModel
 
 	//Pagination
 	FindAllPaginated(limit, offset int) []domainApi.SpellModel

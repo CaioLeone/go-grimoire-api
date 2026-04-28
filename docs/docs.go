@@ -398,7 +398,7 @@ const docTemplate = `{
                 "summary": "Busca magias por ID (uso Interno)",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID da magia",
                         "name": "id",
                         "in": "path"

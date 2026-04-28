@@ -175,14 +175,14 @@ func (h *SpellHandler) handleDeleteSpell(w http.ResponseWriter, r *http.Request)
 // @Success 200 {object} Response
 // @Failure 400 {object} Response
 // @Router /api/spell/element/{element} [get]
-// func (h *SpellHandler) handleGetByElement(w http.ResponseWriter, r *http.Request) {
-// 	element := chi.URLParam(r, "element")
+func (h *SpellHandler) handleGetByElement(w http.ResponseWriter, r *http.Request) {
+	element := chi.URLParam(r, "element")
 
-// 	spells, err := h.useCase.GetByElement(element)
-// 	if err != nil {
-// 		SendJson(w, Response{Error: err.Error()}, http.StatusBadRequest)
-// 		return
-// 	}
+	spells, err := h.useCase.GetByElement(element)
+	if err != nil {
+		SendJson(w, Response{Error: err.Error()}, http.StatusBadRequest)
+		return
+	}
 
-// 	SendJson(w, Response{Data: spells}, http.StatusOK)
-// }
+	SendJson(w, Response{Data: spells}, http.StatusOK)
+}

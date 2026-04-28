@@ -50,19 +50,19 @@ func (u *SpellUsecase) Delete(id uuid.UUID) (domApi.SpellModel, bool) {
 	return u.repo.Delete(id)
 }
 
-// func (u *SpellUsecase) GetByElement(element string) ([]domApi.SpellModel, error) {
-// 	if len(element) < 2 {
-// 		return nil, errors.New("Invalid Element")
-// 	}
+func (u *SpellUsecase) GetByElement(element string) ([]domApi.SpellModel, error) {
+	if len(element) < 2 {
+		return nil, errors.New("Invalid Element")
+	}
 
-// 	spells := u.repo.FindByElement(element)
+	spells := u.repo.FindByElement(element)
 
-// 	if len(spells) == 0 {
-// 		return nil, errors.New("No Spells Found For This Element")
-// 	}
+	if len(spells) == 0 {
+		return nil, errors.New("No Spells Found For This Element")
+	}
 
-// 	return spells, nil
-// }
+	return spells, nil
+}
 
 func (u *SpellUsecase) GetPaginated(page, limit int) []domApi.SpellModel {
 	if page <= 0 {

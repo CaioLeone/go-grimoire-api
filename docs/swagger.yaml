@@ -316,7 +316,7 @@ paths:
       - description: ID da magia
         in: path
         name: id
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
