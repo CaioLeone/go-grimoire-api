@@ -386,6 +386,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/spell/element/{element}": {
+            "get": {
+                "description": "Lista magias por elemento",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "spells"
+                ],
+                "summary": "Lista magias por elemento",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Elemento da magia",
+                        "name": "element",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/spell/{id}": {
             "get": {
                 "description": "Usado principalmente para operações internas (update/delete)",
@@ -490,7 +524,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "ID da magia",
                         "name": "id",
-                        "in": "query"
+                        "in": "path"
                     }
                 ],
                 "responses": {

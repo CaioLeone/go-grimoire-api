@@ -142,7 +142,7 @@ func (h *SpellHandler) handleUpdateSpell(w http.ResponseWriter, r *http.Request)
 // @Description Deleta magia do grimorio
 // @Tags spells
 // @Produce json
-// @Param id query string false "ID da magia"
+// @Param id path string false "ID da magia"
 // @Success 200 {object} Response
 // @Failure 404 {object} Response
 // @Router /api/spell/{id} [delete]
