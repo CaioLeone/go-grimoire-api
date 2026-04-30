@@ -66,9 +66,13 @@ func (h *CreatureHandler) handleGetAllCreature(w http.ResponseWriter, r *http.Re
 	page, _ := strconv.Atoi(query.Get("page"))
 	limit, _ := strconv.Atoi(query.Get("limit"))
 
-	creatures := h.useCase.GetWithFilters(name, attack, defence, sort, order, page, limit)
+	if name == "" && attack == 0 && defence == 0 && sort == "" {
+		creatures := h.useCase.GetAll()
+		SendJson(w, Response{Data: creatures}, http.StatusOK)
+		return
+	}
 
-	//creatures := h.useCase.GetAll()
+	creatures := h.useCase.GetWithFilters(name, attack, defence, sort, order, page, limit)
 	SendJson(w, Response{Data: creatures}, http.StatusOK)
 
 }
