@@ -192,7 +192,7 @@ func (r *SQLiteCreatureRepository) TeachSpell(creatureID, spellID uuid.UUID) err
 
 func (r *SQLiteCreatureRepository) FindAllPaginated(limit, offset int) []domApi.CreatureModel {
 	query := `
-		SELECT id, name, description, attack, defence, hp, spells
+		SELECT id, name, description, attack, defence, hp
 		FROM creatures
 		LIMIT ? OFFSET ?
 	`
@@ -229,7 +229,7 @@ func (r *SQLiteCreatureRepository) FindAllPaginated(limit, offset int) []domApi.
 
 func (r *SQLiteCreatureRepository) FindWithFilters(name string, attack int, defence int, sort string, order string, limit int, offset int) []domApi.CreatureModel {
 	query := `
-		SELECT id, name, description, attack, defence, hp, spells 
+		SELECT id, name, description, attack, defence, hp
 		FROM creatures
 		WHERE 1=1
 	`

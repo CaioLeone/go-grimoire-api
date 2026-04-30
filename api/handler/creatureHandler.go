@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -55,20 +54,20 @@ func (h *CreatureHandler) handleCreateCreature(w http.ResponseWriter, r *http.Re
 // @Failure 400 {object} Response
 // @Router /api/creature [get]
 func (h *CreatureHandler) handleGetAllCreature(w http.ResponseWriter, r *http.Request) {
-	query := r.URL.Query()
+	//query := r.URL.Query()
 
-	name := query.Get("name")
-	attack, _ := strconv.Atoi(query.Get("attack"))
-	defence, _ := strconv.Atoi(query.Get("defence"))
-	sort := query.Get("sort")
-	order := query.Get("order")
+	// name := query.Get("name")
+	// attack, _ := strconv.Atoi(query.Get("attack"))
+	// defence, _ := strconv.Atoi(query.Get("defence"))
+	// sort := query.Get("sort")
+	// order := query.Get("order")
 
-	page, _ := strconv.Atoi(query.Get("page"))
-	limit, _ := strconv.Atoi(query.Get("limit"))
+	// page, _ := strconv.Atoi(query.Get("page"))
+	// limit, _ := strconv.Atoi(query.Get("limit"))
 
-	creatures := h.useCase.GetWithFilters(name, attack, defence, sort, order, page, limit)
+	//creatures := h.useCase.GetWithFilters(name, attack, defence, sort, order, page, limit)
 
-	//creatures := h.useCase.GetAll()
+	creatures := h.useCase.GetAll()
 	SendJson(w, Response{Data: creatures}, http.StatusOK)
 
 }
