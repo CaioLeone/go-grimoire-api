@@ -74,10 +74,13 @@ func (r *SQLiteCreatureRepository) FindById(id uuid.UUID) (domApi.CreatureModel,
 
 	var creature domApi.CreatureModel
 	var creatureID string
+	found := false
 
 	spellsMap := make(map[string]domApi.SpellModel)
 
 	for rows.Next() {
+		found = true
+
 		var spell domApi.SpellModel
 		var spellID sql.NullString
 
@@ -99,7 +102,9 @@ func (r *SQLiteCreatureRepository) FindById(id uuid.UUID) (domApi.CreatureModel,
 			return domApi.CreatureModel{}, false
 		}
 
-		creature.ID, _ = uuid.Parse(creatureID)
+		if creature.ID == uuid.Nil {
+			creature.ID, _ = uuid.Parse(creatureID)
+		}
 
 		//EVITA NIL SPELL
 		if spellID.Valid {
@@ -111,6 +116,10 @@ func (r *SQLiteCreatureRepository) FindById(id uuid.UUID) (domApi.CreatureModel,
 		}
 	}
 
+	if !found {
+		return domApi.CreatureModel{}, false
+	}
+
 	//TRANSFORMA MAP -> SLICE
 	for _, s := range spellsMap {
 		creature.Spells = append(creature.Spells, s)
@@ -119,6 +128,7 @@ func (r *SQLiteCreatureRepository) FindById(id uuid.UUID) (domApi.CreatureModel,
 	return creature, true
 
 }
+
 func (r *SQLiteCreatureRepository) Update(id uuid.UUID, creature domApi.CreatureModel) (domApi.CreatureModel, bool) {
 	query := `UPDATE creatures SET name = ?, description = ?, attack = ?, defence = ?, hp = ? WHERE id = ?`
 
