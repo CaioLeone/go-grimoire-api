@@ -21,7 +21,7 @@ func (r *SQLiteCreatureRepository) Insert(creature domApi.CreatureModel) domApi.
 
 	query := `
 		INSERT INTO creatures(id, name, description, attack, defence, hp)
-		VALUES (?, ?, ?, ?, ?)
+		VALUES (?, ?, ?, ?, ?, ?)
 	`
 
 	r.db.Exec(query,
@@ -37,7 +37,10 @@ func (r *SQLiteCreatureRepository) Insert(creature domApi.CreatureModel) domApi.
 }
 
 func (r *SQLiteCreatureRepository) FindAll() []domApi.CreatureModel {
-	rows, _ := r.db.Query("SELECT id, name, description, attack, defence, hp FROM creatures")
+	rows, err := r.db.Query("SELECT id, name, description, attack, defence, hp FROM creatures")
+	if err != nil {
+		return []domApi.CreatureModel{}
+	}
 	defer rows.Close()
 
 	var creatures []domApi.CreatureModel
@@ -60,7 +63,7 @@ func (r *SQLiteCreatureRepository) FindById(id uuid.UUID) (domApi.CreatureModel,
 	SELECT 
 		c.id, c.name, c.description, c.attack, c.defence, c.hp,
 		s.id, s.name, s.description, s.element, s.mana_cost 
-	FROM creatures 
+	FROM creatures c
 	LEFT JOIN creature_spells cs ON c.id = cs.creature_id
 	LEFT JOIN spells s ON cs.spell_id = s.id
 	WHERE c.id = ?
@@ -224,7 +227,6 @@ func (r *SQLiteCreatureRepository) FindAllPaginated(limit, offset int) []domApi.
 			&c.Attack,
 			&c.Defence,
 			&c.Hp,
-			&c.Spells,
 		)
 
 		if err != nil {
@@ -284,6 +286,7 @@ func (r *SQLiteCreatureRepository) FindWithFilters(name string, attack int, defe
 
 	rows, err := r.db.Query(query, args...)
 	if err != nil {
+		fmt.Println("SQL ERROR: ", err)
 		return []domApi.CreatureModel{}
 	}
 
