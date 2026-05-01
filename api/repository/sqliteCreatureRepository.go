@@ -64,7 +64,7 @@ func (r *SQLiteCreatureRepository) FindAll() []domApi.CreatureModel {
 
 func (r *SQLiteCreatureRepository) FindById(id uuid.UUID) (domApi.CreatureModel, bool) {
 	queryCreature := `
-		SELECT id,name, description, attack, defence, hp, 
+		SELECT id,name, description, attack, defence, hp
 		FROM creatures
 		WHERE id = ?
 	`
@@ -83,7 +83,7 @@ func (r *SQLiteCreatureRepository) FindById(id uuid.UUID) (domApi.CreatureModel,
 	if err != nil {
 		return domApi.CreatureModel{}, false
 	}
-
+	fmt.Println(">>> CRIATURA ENCONTRADA <<<")
 	creature.ID, _ = uuid.Parse(creatureID)
 
 	querySpells := `
