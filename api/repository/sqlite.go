@@ -26,7 +26,7 @@ func InitDB(db *sql.DB) error {
 		);`
 
 	queryCreature := `
-		CREATE TABLE IF NOT EXISTS creature (
+		CREATE TABLE IF NOT EXISTS creatures (
 			id TEXT PRIMARY KEY,
 			name TEXT,
 			description TEXT,

@@ -24,7 +24,7 @@ func (r *SQLiteCreatureRepository) Insert(creature domApi.CreatureModel) domApi.
 		VALUES (?, ?, ?, ?, ?, ?)
 	`
 
-	r.db.Exec(query,
+	_, err := r.db.Exec(query,
 		creature.ID.String(),
 		creature.Name,
 		creature.Description,
@@ -32,6 +32,9 @@ func (r *SQLiteCreatureRepository) Insert(creature domApi.CreatureModel) domApi.
 		creature.Defence,
 		creature.Hp,
 	)
+	if err != nil {
+		fmt.Println("INSERT ERROR: ", err)
+	}
 
 	return creature
 }
@@ -53,8 +56,9 @@ func (r *SQLiteCreatureRepository) FindAll() []domApi.CreatureModel {
 		c.ID, _ = uuid.Parse(id)
 
 		creatures = append(creatures, c)
+		fmt.Println("CREATURE: ", c.Name)
 	}
-
+	fmt.Println(">>> BUSCANDO TODAS CRIATURAS <<< ")
 	return creatures
 }
 
