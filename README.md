@@ -261,7 +261,7 @@ Todas as respostas de erro devem seguir:
 
 Se quiser evoluir depois:
 
-- [ ] Swagger
+- [X] Swagger
 - [ ] Autenticação (API Key ou JWT)
 - [ ] Cache (Redis)
 - [ ] Testes Automatizados
