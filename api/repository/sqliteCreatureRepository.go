@@ -63,41 +63,50 @@ func (r *SQLiteCreatureRepository) FindAll() []domApi.CreatureModel {
 }
 
 func (r *SQLiteCreatureRepository) FindById(id uuid.UUID) (domApi.CreatureModel, bool) {
-	query := `
-	SELECT 
-		c.id, c.name, c.description, c.attack, c.defence, c.hp,
-		s.id, s.name, s.description, s.element, s.mana_cost 
-	FROM creatures c
-	LEFT JOIN creature_spells cs ON c.id = cs.creature_id
-	LEFT JOIN spells s ON cs.spell_id = s.id
-	WHERE c.id = ?
+	queryCreature := `
+		SELECT id,name, description, attack, defence, hp, 
+		FROM creatures
+		WHERE id = ?
 	`
+	var creature domApi.CreatureModel
+	var creatureID string
 
-	rows, err := r.db.Query(query, id.String())
+	err := r.db.QueryRow(queryCreature, id.String()).Scan(
+		&creatureID,
+		&creature.Name,
+		&creature.Description,
+		&creature.Attack,
+		&creature.Defence,
+		&creature.Hp,
+	)
+
 	if err != nil {
 		return domApi.CreatureModel{}, false
 	}
+
+	creature.ID, _ = uuid.Parse(creatureID)
+
+	querySpells := `
+		SELECT s.id, s.name, s.description, s.element, s.mana_cost
+		FROM spells s
+		INNER JOIN creature_spells cs ON s.id = cs.spell_id
+		WHERE cs.creature_id = ?
+	`
+	//RETORNA CRIATURA SEM SPELLS
+	rows, err := r.db.Query(querySpells, id.String())
+	if err != nil {
+		return creature, false
+	}
 	defer rows.Close()
 
-	var creature domApi.CreatureModel
-	var creatureID string
-	found := false
-
-	spellsMap := make(map[string]domApi.SpellModel)
+	//spellsMap := make(map[string]domApi.SpellModel)
 
 	for rows.Next() {
-		found = true
 
 		var spell domApi.SpellModel
-		var spellID sql.NullString
+		var spellID string
 
 		err := rows.Scan(
-			&creatureID,
-			&creature.Name,
-			&creature.Description,
-			&creature.Attack,
-			&creature.Defence,
-			&creature.Hp,
 			&spellID,
 			&spell.Name,
 			&spell.Description,
@@ -106,34 +115,14 @@ func (r *SQLiteCreatureRepository) FindById(id uuid.UUID) (domApi.CreatureModel,
 		)
 
 		if err != nil {
-			return domApi.CreatureModel{}, false
+			continue
 		}
 
-		if creature.ID == uuid.Nil {
-			creature.ID, _ = uuid.Parse(creatureID)
-		}
-
-		//EVITA NIL SPELL
-		if spellID.Valid {
-			spell.ID, _ = uuid.Parse(spellID.String)
-
-			if _, exists := spellsMap[spell.ID.String()]; !exists {
-				spellsMap[spell.ID.String()] = spell
-			}
-		}
-	}
-
-	if !found {
-		return domApi.CreatureModel{}, false
-	}
-
-	//TRANSFORMA MAP -> SLICE
-	for _, s := range spellsMap {
-		creature.Spells = append(creature.Spells, s)
+		spell.ID, _ = uuid.Parse(spellID)
+		creature.Spells = append(creature.Spells, spell)
 	}
 
 	return creature, true
-
 }
 
 func (r *SQLiteCreatureRepository) Update(id uuid.UUID, creature domApi.CreatureModel) (domApi.CreatureModel, bool) {
@@ -171,8 +160,13 @@ func (r *SQLiteCreatureRepository) Delete(id uuid.UUID) (domApi.CreatureModel, b
 
 	query := `DELETE FROM creatures WHERE id = ?`
 
-	_, err := r.db.Exec(query, id.String())
+	result, err := r.db.Exec(query, id.String())
 	if err != nil {
+		return domApi.CreatureModel{}, false
+	}
+
+	rowsAffected, _ := result.RowsAffected()
+	if rowsAffected == 0 {
 		return domApi.CreatureModel{}, false
 	}
 
