@@ -19,6 +19,7 @@ func newFakeSpellRepo() *fakeSpellRepo {
 
 func (f *fakeSpellRepo) Insert(s domApi.SpellModel) domApi.SpellModel {
 	s.ID = uuid.New()
+	f.data[s.ID] = s
 	return s
 }
 
@@ -48,7 +49,14 @@ func (f *fakeSpellRepo) FindAllPaginated(limit, offset int) []domApi.SpellModel 
 }
 
 func (f *fakeSpellRepo) FindByElement(element string) []domApi.SpellModel {
-	return []domApi.SpellModel{}
+	var result []domApi.SpellModel
+
+	for _, s := range f.data {
+		if s.Element == element {
+			result = append(result, s)
+		}
+	}
+	return result
 }
 
 func (f *fakeSpellRepo) FindWithFilters(name, element, sort, order string, limit, offset int) []domApi.SpellModel {
@@ -59,7 +67,7 @@ func TestCreateSpell_Success(t *testing.T) {
 	repo := newFakeSpellRepo()
 
 	usecase := SpellUsecase{
-		spellRepo: repo,
+		repo: repo,
 	}
 
 	spell := domApi.SpellModel{
@@ -101,7 +109,7 @@ func TestGetSpellById_Success(t *testing.T) {
 	repo := &fakeSpellRepo{}
 
 	usecase := SpellUsecase{
-		spellRepo: repo,
+		repo: repo,
 	}
 
 	created := repo.Insert(domApi.SpellModel{
@@ -125,7 +133,7 @@ func TestUpdateSpell_Success(t *testing.T) {
 	repo := &fakeSpellRepo{}
 
 	usecase := SpellUsecase{
-		spellRepo: repo,
+		repo: repo,
 	}
 
 	created := repo.Insert(domApi.SpellModel{
@@ -155,7 +163,7 @@ func TestDeleteSpell_Success(t *testing.T) {
 	repo := &fakeSpellRepo{}
 
 	usecase := SpellUsecase{
-		spellRepo: repo,
+		repo: repo,
 	}
 
 	created := repo.Insert(domApi.SpellModel{
@@ -182,7 +190,7 @@ func TestGetAllSpells(t *testing.T) {
 	repo := &fakeSpellRepo{}
 
 	usecase := SpellUsecase{
-		spellRepo: repo,
+		repo: repo,
 	}
 
 	repo.Insert(domApi.SpellModel{Name: "Fire"})
@@ -196,15 +204,33 @@ func TestGetAllSpells(t *testing.T) {
 }
 
 func TestFindSpellByElement(t *testing.T) {
-	repo := &fakeSpellRepo{}
+	repo := newFakeSpellRepo()
 
 	usecase := SpellUsecase{
-		spellRepo: repo,
+		repo: repo,
 	}
 
-	result := usecase.GetByElement("Fire")
+	repo.Insert(domApi.SpellModel{
+		Name:    "Fireball",
+		Element: "Fire",
+	})
 
-	if result == nil {
-		t.Errorf("Esperava Lista de Spells")
+	repo.Insert(domApi.SpellModel{
+		Name:    "Ice Spike",
+		Element: "Ice",
+	})
+
+	result, err := usecase.GetByElement("Fire")
+
+	if err != nil {
+		t.Errorf("Nao Esperava Erro, Mas Veio: %v", err)
+	}
+
+	if len(result) != 1 {
+		t.Errorf("Esperava 1 Spell, veio %d", len(result))
+	}
+
+	if result[0].Element != "Fire" {
+		t.Errorf("Filtro Nao Funciona")
 	}
 }
