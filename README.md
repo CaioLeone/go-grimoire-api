@@ -264,5 +264,5 @@ Se quiser evoluir depois:
 - [X] Swagger
 - [ ] Autenticação (API Key ou JWT)
 - [ ] Cache (Redis)
-- [ ] Testes Automatizados
+- [X] Testes Automatizados
 - [ ] Deploy (Vercel / Railway / Fly.io)
