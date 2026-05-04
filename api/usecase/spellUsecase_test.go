@@ -24,11 +24,18 @@ func (f *fakeSpellRepo) Insert(s domApi.SpellModel) domApi.SpellModel {
 }
 
 func (f *fakeSpellRepo) FindAll() []domApi.SpellModel {
-	return []domApi.SpellModel{}
+	var result []domApi.SpellModel
+
+	for _, s := range f.data {
+		result = append(result, s)
+	}
+
+	return result
 }
 
 func (f *fakeSpellRepo) FindById(id uuid.UUID) (domApi.SpellModel, bool) {
-	return domApi.SpellModel{ID: id}, true
+	s, ok := f.data[id]
+	return s, ok
 }
 
 func (f *fakeSpellRepo) FindByName(name string) (domApi.SpellModel, bool) {
@@ -36,12 +43,23 @@ func (f *fakeSpellRepo) FindByName(name string) (domApi.SpellModel, bool) {
 }
 
 func (f *fakeSpellRepo) Update(id uuid.UUID, s domApi.SpellModel) (domApi.SpellModel, bool) {
+	_, ok := f.data[id]
+	if !ok {
+		return domApi.SpellModel{}, false
+	}
+
 	s.ID = id
+	f.data[id] = s
 	return s, true
 }
 
 func (f *fakeSpellRepo) Delete(id uuid.UUID) (domApi.SpellModel, bool) {
-	return domApi.SpellModel{ID: id}, true
+	s, ok := f.data[id]
+	if !ok {
+		return domApi.SpellModel{}, false
+	}
+	delete(f.data, id)
+	return s, true
 }
 
 func (f *fakeSpellRepo) FindAllPaginated(limit, offset int) []domApi.SpellModel {
