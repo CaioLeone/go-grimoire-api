@@ -112,6 +112,7 @@ func TestCreateSpell_Success(t *testing.T) {
 
 func TestCreateSpell_InvalidName(t *testing.T) {
 	usecase := SpellUsecase{}
+	
 	spell := domApi.SpellModel{
 		Name: "A",
 	}

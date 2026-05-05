@@ -18,13 +18,17 @@ func NewSpellUseCase(repo repoApi.SpellRepository) *SpellUsecase {
 
 func (u *SpellUsecase) CreateSpell(spell domApi.SpellModel) (domApi.SpellModel, error) {
 
-	_, exists := u.repo.FindByName(spell.Name)
-	if exists {
-		return domApi.SpellModel{}, errors.New("Spell Already Exists")
-	}
+	//_, exists := u.repo.FindByName(spell.Name)
+	// if exists {
+	// 	return domApi.SpellModel{}, errors.New("Spell Already Exists")
+	// }
 
 	if len(spell.Name) <= 2 {
 		return domApi.SpellModel{}, errors.New("Invalid Name")
+	}
+
+	if len(spell.Description) < 2 {
+		return domApi.SpellModel{}, errors.New("Invalid Description")
 	}
 
 	if spell.ManaCost <= 0 {
