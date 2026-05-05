@@ -79,6 +79,16 @@ func (f *fakeCreatureRepo) FindWithFilters(name string, attack int, defence int,
 	return f.FindAll()
 }
 
+func ValidCreature() domApi.CreatureModel {
+	return domApi.CreatureModel{
+		Name:        "Orc",
+		Description: "Bruto forte",
+		Attack:      5,
+		Defence:     3,
+		Hp:          20,
+	}
+}
+
 // Implementa so o que precisa
 func TestCreateCreature_Success(t *testing.T) {
 	repo := newFakeCreatureRepo()
@@ -108,6 +118,76 @@ func TestCreateCreature_Success(t *testing.T) {
 
 	if result.Name != "Goblin" {
 		t.Errorf("Nome Incorreto")
+	}
+}
+
+func TestCreateCreature_Validation(t *testing.T) {
+	usecase := CreatureUsecase{
+		creatureRepo: newFakeCreatureRepo(),
+	}
+
+	tests := []struct {
+		name     string
+		modify   func(c *domApi.CreatureModel)
+		wantFail bool
+	}{
+		{
+			name:     "Valid Creature",
+			modify:   func(c *domApi.CreatureModel) {},
+			wantFail: false,
+		},
+		{
+			name: "Invalid Name",
+			modify: func(c *domApi.CreatureModel) {
+				c.Name = "A"
+			},
+			wantFail: true,
+		},
+		{
+			name: "Invalid Description",
+			modify: func(c *domApi.CreatureModel) {
+				c.Description = "L"
+			},
+			wantFail: true,
+		},
+		{
+			name: "Invalid Attack",
+			modify: func(c *domApi.CreatureModel) {
+				c.Attack = -5
+			},
+			wantFail: true,
+		},
+		{
+			name: "Invalid Defence",
+			modify: func(c *domApi.CreatureModel) {
+				c.Defence = -4
+			},
+			wantFail: true,
+		},
+		{
+			name: "Invalid HP",
+			modify: func(c *domApi.CreatureModel) {
+				c.Hp = -50
+			},
+			wantFail: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			creature := ValidCreature()
+			tt.modify(&creature)
+
+			_, err := usecase.CreateCreature(creature)
+
+			if tt.wantFail && err == nil {
+				t.Errorf("Esperava Erro, Mas Veio Nil")
+			}
+
+			if !tt.wantFail && err != nil {
+				t.Errorf("Nao Esperava Erro, Mas Veio: %v", err)
+			}
+		})
 	}
 }
 
