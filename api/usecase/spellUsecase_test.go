@@ -18,6 +18,10 @@ func newFakeSpellRepo() *fakeSpellRepo {
 }
 
 func (f *fakeSpellRepo) Insert(s domApi.SpellModel) domApi.SpellModel {
+	if f.data == nil {
+		f.data = make(map[uuid.UUID]domApi.SpellModel)
+	}
+
 	s.ID = uuid.New()
 	f.data[s.ID] = s
 	return s
