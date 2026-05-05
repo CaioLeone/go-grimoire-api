@@ -213,23 +213,27 @@ func TestDeleteCreature_Success(t *testing.T) {
 
 func TestTeachSpell_Success(t *testing.T) {
 	repo := newFakeCreatureRepo()
+	spellRepo := newFakeSpellRepo()
 
 	usecase := CreatureUsecase{
 		creatureRepo: repo,
-		spellRepo:    &fakeSpellRepo{},
+		spellRepo:    spellRepo,
 	}
 
 	created := repo.Insert(domApi.CreatureModel{
 		Name:        "Mage",
-		Description: "Sábio",
+		Description: "Sabio",
 		Attack:      2,
 		Defence:     2,
 		Hp:          10,
 	})
 
-	spellId := uuid.New()
+	spell := spellRepo.Insert(domApi.SpellModel{
+		Name:    "Fireball",
+		Element: "Fire",
+	})
 
-	err := usecase.TeachSpell(created.ID, spellId)
+	err := usecase.TeachSpell(created.ID, spell.ID)
 
 	if err != nil {
 		t.Fatalf("Erro ao ensinar magia: %v", err)
@@ -239,5 +243,25 @@ func TestTeachSpell_Success(t *testing.T) {
 
 	if len(c.Spells) == 0 {
 		t.Errorf("Magia Nao Foi Adicionado")
+	}
+}
+
+func TestTeachSpell_SpellNotFound(t *testing.T) {
+	repo := newFakeCreatureRepo()
+	spellRepo := newFakeSpellRepo()
+
+	usecase := CreatureUsecase{
+		creatureRepo: repo,
+		spellRepo:    spellRepo,
+	}
+
+	created := repo.Insert(domApi.CreatureModel{
+		Name: "Feiticeira",
+	})
+
+	err := usecase.TeachSpell(created.ID, uuid.New())
+
+	if err == nil {
+		t.Errorf("Esperava erro de spell nao encontrado")
 	}
 }
