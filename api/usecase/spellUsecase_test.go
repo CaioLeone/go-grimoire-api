@@ -112,7 +112,7 @@ func TestCreateSpell_Success(t *testing.T) {
 
 func TestCreateSpell_InvalidName(t *testing.T) {
 	usecase := SpellUsecase{}
-	
+
 	spell := domApi.SpellModel{
 		Name: "A",
 	}
@@ -125,7 +125,7 @@ func TestCreateSpell_InvalidName(t *testing.T) {
 }
 
 func TestGetSpellById_Success(t *testing.T) {
-	repo := &fakeSpellRepo{}
+	repo := newFakeSpellRepo()
 
 	usecase := SpellUsecase{
 		repo: repo,
@@ -149,7 +149,7 @@ func TestGetSpellById_Success(t *testing.T) {
 }
 
 func TestUpdateSpell_Success(t *testing.T) {
-	repo := &fakeSpellRepo{}
+	repo := newFakeSpellRepo()
 
 	usecase := SpellUsecase{
 		repo: repo,
@@ -179,7 +179,7 @@ func TestUpdateSpell_Success(t *testing.T) {
 }
 
 func TestDeleteSpell_Success(t *testing.T) {
-	repo := &fakeSpellRepo{}
+	repo := newFakeSpellRepo()
 
 	usecase := SpellUsecase{
 		repo: repo,
@@ -206,7 +206,7 @@ func TestDeleteSpell_Success(t *testing.T) {
 }
 
 func TestGetAllSpells(t *testing.T) {
-	repo := &fakeSpellRepo{}
+	repo := newFakeSpellRepo()
 
 	usecase := SpellUsecase{
 		repo: repo,
