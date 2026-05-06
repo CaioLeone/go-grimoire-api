@@ -204,6 +204,45 @@ func TestCreateCreature_InvalidName(t *testing.T) {
 	}
 }
 
+// GET BY ID TESTS
+func TestGetById_Validation(t *testing.T) {
+	repo := newFakeCreatureRepo()
+
+	usecase := CreatureUsecase{
+		creatureRepo: repo,
+	}
+
+	//Cria Criatura valida
+	created := repo.Insert(ValidCreature())
+
+	tests := []struct {
+		name      string
+		id        uuid.UUID
+		wantFound bool
+	}{
+		{
+			name:      "Creature Found",
+			id:        created.ID,
+			wantFound: true,
+		},
+		{
+			name:      "Creature Not Found",
+			id:        uuid.New(),
+			wantFound: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+
+			_, ok := usecase.GetById(tt.id)
+
+			if ok != tt.wantFound {
+				t.Errorf("Esperava %v, Mas Veio: %v", tt.wantFound, ok)
+			}
+		})
+	}
+}
+
 func TestGetById_Success(t *testing.T) {
 	repo := newFakeCreatureRepo()
 
@@ -229,6 +268,7 @@ func TestGetById_Success(t *testing.T) {
 	}
 }
 
+// UPDATE TESTS
 func TestUpdateCreature_Success(t *testing.T) {
 	repo := newFakeCreatureRepo()
 
@@ -263,6 +303,7 @@ func TestUpdateCreature_Success(t *testing.T) {
 	}
 }
 
+// DELETE TEST
 func TestDeleteCreature_Success(t *testing.T) {
 	repo := newFakeCreatureRepo()
 
@@ -291,6 +332,7 @@ func TestDeleteCreature_Success(t *testing.T) {
 	}
 }
 
+// TEACH SPELL TEST
 func TestTeachSpell_Success(t *testing.T) {
 	repo := newFakeCreatureRepo()
 	spellRepo := newFakeSpellRepo()
