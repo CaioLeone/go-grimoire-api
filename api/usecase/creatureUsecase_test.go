@@ -304,6 +304,51 @@ func TestUpdateCreature_Success(t *testing.T) {
 }
 
 // DELETE TEST
+
+func TestDeleteCreature_Validation(t *testing.T) {
+
+	tests := []struct {
+		name       string
+		setup      func(repo *fakeCreatureRepo) uuid.UUID
+		wantDelete bool
+	}{
+		{
+			name: "Creature Deleted",
+			setup: func(repo *fakeCreatureRepo) uuid.UUID {
+				created := repo.Insert(ValidCreature())
+				return created.ID
+			},
+			wantDelete: true,
+		},
+		{
+			name: "Creature Not Found",
+			setup: func(repo *fakeCreatureRepo) uuid.UUID {
+				return uuid.New()
+			},
+			wantDelete: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+
+			repo := newFakeCreatureRepo()
+
+			usecase := CreatureUsecase{
+				creatureRepo: repo,
+			}
+
+			id := tt.setup(repo)
+
+			_, ok := usecase.Delete(id)
+
+			if ok != tt.wantDelete {
+				t.Errorf("Esperava %v, Mas Veio %v", tt.wantDelete, ok)
+			}
+		})
+	}
+}
+
 func TestDeleteCreature_Success(t *testing.T) {
 	repo := newFakeCreatureRepo()
 
