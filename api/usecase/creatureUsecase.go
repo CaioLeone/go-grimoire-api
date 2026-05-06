@@ -54,8 +54,28 @@ func (u *CreatureUsecase) GetById(id uuid.UUID) (domApi.CreatureModel, bool) {
 	return u.creatureRepo.FindById(id)
 }
 
-func (u *CreatureUsecase) Update(id uuid.UUID, s domApi.CreatureModel) (domApi.CreatureModel, bool) {
-	return u.creatureRepo.Update(id, s)
+func (u *CreatureUsecase) Update(id uuid.UUID, c domApi.CreatureModel) (domApi.CreatureModel, bool) {
+	if len(c.Name) < 2 {
+		return domApi.CreatureModel{}, false
+	}
+
+	if len(c.Description) < 2 {
+		return domApi.CreatureModel{}, false
+	}
+
+	if c.Attack <= 0 {
+		return domApi.CreatureModel{}, false
+	}
+
+	if c.Defence <= 0 {
+		return domApi.CreatureModel{}, false
+	}
+
+	if c.Hp <= 0 {
+		return domApi.CreatureModel{}, false
+	}
+
+	return u.creatureRepo.Update(id, c)
 }
 
 func (u *CreatureUsecase) Delete(id uuid.UUID) (domApi.CreatureModel, bool) {

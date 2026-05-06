@@ -269,6 +269,95 @@ func TestGetById_Success(t *testing.T) {
 }
 
 // UPDATE TESTS
+func TestUpdateCreature_Validation(t *testing.T) {
+	tests := []struct {
+		name    string
+		payload domApi.CreatureModel
+		wantOK  bool
+	}{
+		{
+			name: "Success Update",
+			payload: domApi.CreatureModel{
+				Name:        "Mega Orc",
+				Description: "Muito forte",
+				Attack:      10,
+				Defence:     8,
+				Hp:          50,
+			},
+			wantOK: true,
+		},
+		{
+			name: "Fail - Invalid Name",
+			payload: func() domApi.CreatureModel {
+				c := ValidCreature()
+				c.Name = "A"
+				return c
+			}(),
+			wantOK: false,
+		},
+		{
+			name: "Fail - Invalid Description",
+			payload: func() domApi.CreatureModel {
+				c := ValidCreature()
+				c.Description = "D"
+				return c
+			}(),
+			wantOK: false,
+		},
+		{
+			name: "Fail - Invalid Attack",
+			payload: func() domApi.CreatureModel {
+				c := ValidCreature()
+				c.Attack = -1
+				return c
+			}(),
+			wantOK: false,
+		},
+		{
+			name: "Fail - Invalid Defence",
+			payload: func() domApi.CreatureModel {
+				c := ValidCreature()
+				c.Defence = -1
+				return c
+			}(),
+			wantOK: false,
+		}, 
+		{
+			name: "Fail - Invalid HP",
+			payload: func() domApi.CreatureModel {
+				c := ValidCreature()
+				c.Hp = -1
+				return c
+			}(),
+			wantOK: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			repo := newFakeCreatureRepo()
+
+			usecase := CreatureUsecase{
+				creatureRepo: repo,
+			}
+
+			created := repo.Insert(ValidCreature())
+
+			result, ok := usecase.Update(created.ID, tt.payload)
+
+			if ok != tt.wantOK {
+				t.Errorf("Esperava %v, Mas Veio %v", tt.wantOK, ok)
+			}
+
+			if ok {
+				if result.Name != tt.payload.Name {
+					t.Errorf("Update Nao Aplicado Corretamente")
+				}
+			}
+		})
+	}
+}
+
 func TestUpdateCreature_Success(t *testing.T) {
 	repo := newFakeCreatureRepo()
 
