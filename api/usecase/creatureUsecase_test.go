@@ -321,7 +321,7 @@ func TestUpdateCreature_Validation(t *testing.T) {
 				return c
 			}(),
 			wantOK: false,
-		}, 
+		},
 		{
 			name: "Fail - Invalid HP",
 			payload: func() domApi.CreatureModel {
@@ -467,6 +467,10 @@ func TestDeleteCreature_Success(t *testing.T) {
 }
 
 // TEACH SPELL TEST
+func TestTeachSpell_validation(t *testing.T) {
+
+}
+
 func TestTeachSpell_Success(t *testing.T) {
 	repo := newFakeCreatureRepo()
 	spellRepo := newFakeSpellRepo()
