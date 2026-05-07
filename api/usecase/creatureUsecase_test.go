@@ -468,7 +468,80 @@ func TestDeleteCreature_Success(t *testing.T) {
 
 // TEACH SPELL TEST
 func TestTeachSpell_validation(t *testing.T) {
+	tests := []struct {
+		name           string
+		createCreature bool
+		CreateSpell    bool
+		wantError      bool
+	}{
+		{
+			name:           "Success",
+			createCreature: true,
+			CreateSpell:    true,
+			wantError:      false,
+		},
+		{
+			name:           "Fail - Creature Not Found",
+			createCreature: false,
+			CreateSpell:    true,
+			wantError:      true,
+		},
+		{
+			name:           "Fail - Spell Not Found",
+			createCreature: true,
+			CreateSpell:    false,
+			wantError:      true,
+		},
+	}
 
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			creatureRepo := newFakeCreatureRepo()
+			spellRepo := newFakeSpellRepo()
+
+			usecase := CreatureUsecase{
+				creatureRepo: creatureRepo,
+				spellRepo:    spellRepo,
+			}
+
+			creatureID := uuid.New()
+			spellID := uuid.New()
+
+			if tt.createCreature {
+				createdCreature := creatureRepo.Insert(ValidCreature())
+				creatureID = createdCreature.ID
+			}
+
+			if tt.CreateSpell {
+				createdSpell := spellRepo.Insert(domApi.SpellModel{
+					Name:        "Fireball",
+					Description: "Explosão de fogo",
+					Element:     "Fire",
+					ManaCost:    10,
+				})
+
+				spellID = createdSpell.ID
+			}
+
+			err := usecase.TeachSpell(creatureID, spellID)
+
+			if tt.wantError && err == nil {
+				t.Errorf("Esperava Erro, Mas Veio Nil")
+			}
+
+			if !tt.wantError && err != nil {
+				t.Errorf("Nao Esperava Erro, Mas Veio: %v", err)
+			}
+
+			if !tt.wantError {
+				updatedCreature, _ := creatureRepo.FindById(creatureID)
+
+				if len(updatedCreature.Spells) != 1 {
+					t.Errorf("Spell Nao Foi Adicionado")
+				}
+			}
+		})
+	}
 }
 
 func TestTeachSpell_Success(t *testing.T) {
