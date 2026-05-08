@@ -85,6 +85,14 @@ func (f *fakeSpellRepo) FindWithFilters(name, element, sort, order string, limit
 	return []domApi.SpellModel{}
 }
 
+func ValidSpell() domApi.SpellModel {
+	return domApi.SpellModel{
+		Name:        "Raios",
+		Description: "Lancas de raios caem do ceu",
+		ManaCost:    5,
+		Element:     "Raio",
+	}
+}
 func TestCreateSpell_Success(t *testing.T) {
 	repo := newFakeSpellRepo()
 
