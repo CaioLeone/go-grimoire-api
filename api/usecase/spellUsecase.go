@@ -47,6 +47,18 @@ func (u *SpellUsecase) GetById(id uuid.UUID) (domApi.SpellModel, bool) {
 }
 
 func (u *SpellUsecase) Update(id uuid.UUID, s domApi.SpellModel) (domApi.SpellModel, bool) {
+	if len(s.Name) <= 2 {
+		return domApi.SpellModel{}, false
+	}
+
+	if len(s.Description) < 2 {
+		return domApi.SpellModel{}, false
+	}
+
+	if s.ManaCost <= 0 {
+		return domApi.SpellModel{}, false
+	}
+
 	return u.repo.Update(id, s)
 }
 
