@@ -201,6 +201,44 @@ func TestCreateSpell_InvalidName(t *testing.T) {
 	}
 }
 
+// GETBYID VALIDATION
+func TestSpellGetById_Validation(t *testing.T) {
+	repoSpell := newFakeSpellRepo()
+
+	usecase := SpellUsecase{
+		repo: repoSpell,
+	}
+
+	//Cria Criatura valida
+	created := repoSpell.Insert(ValidSpell())
+
+	tests := []struct {
+		name      string
+		id        uuid.UUID
+		wantFound bool
+	}{
+		{
+			name:      "Spell Found",
+			id:        created.ID,
+			wantFound: true,
+		},
+		{
+			name:      "Spell Not Found",
+			id:        uuid.New(),
+			wantFound: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+
+			_, ok := usecase.GetById(tt.id)
+
+			if ok != tt.wantFound {
+				t.Errorf("Esperava %v, Mas Veio: %v", tt.wantFound, ok)
+			}
+		})
+	}
+}
 func TestGetSpellById_Success(t *testing.T) {
 	repo := newFakeSpellRepo()
 
