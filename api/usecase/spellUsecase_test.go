@@ -263,6 +263,86 @@ func TestGetSpellById_Success(t *testing.T) {
 	}
 }
 
+// UPDATE SPELL VALIDATION
+func TestUpdateSpell_Validation(t *testing.T) {
+	tests := []struct {
+		name    string
+		payload domApi.SpellModel
+		wantOK  bool
+	}{
+		{
+			name: "Success Update",
+			payload: domApi.SpellModel{
+				Name:        "Torre de Chamas",
+				Description: "Torre de chamas surge e queima tudo",
+				ManaCost:    10,
+				Element:     "Fogo",
+			},
+			wantOK: true,
+		},
+		{
+			name: "Fail - Invalid Name",
+			payload: func() domApi.SpellModel {
+				s := ValidSpell()
+				s.Name = "A"
+				return s
+			}(),
+			wantOK: false,
+		},
+		{
+			name: "Fail - Invalid Description",
+			payload: func() domApi.SpellModel {
+				s := ValidSpell()
+				s.Description = "D"
+				return s
+			}(),
+			wantOK: false,
+		},
+		{
+			name: "Fail - Invalid Mana Cost",
+			payload: func() domApi.SpellModel {
+				s := ValidSpell()
+				s.ManaCost = -1
+				return s
+			}(),
+			wantOK: false,
+		},
+		{
+			name: "Fail - Invalid Element",
+			payload: func() domApi.SpellModel {
+				s := ValidSpell()
+				s.Element = "A"
+				return s
+			}(),
+			wantOK: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			repo := newFakeSpellRepo()
+
+			usecase := SpellUsecase{
+				repo: repo,
+			}
+
+			created := repo.Insert(ValidSpell())
+
+			result, ok := usecase.Update(created.ID, tt.payload)
+
+			if ok != tt.wantOK {
+				t.Errorf("Esperava %v, Mas Veio %v", tt.wantOK, ok)
+			}
+
+			if ok {
+				if result.Name != tt.payload.Name {
+					t.Errorf("Update Nao Aplicado Corretamente")
+				}
+			}
+		})
+	}
+}
+
 func TestUpdateSpell_Success(t *testing.T) {
 	repo := newFakeSpellRepo()
 
