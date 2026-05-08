@@ -93,6 +93,71 @@ func ValidSpell() domApi.SpellModel {
 		Element:     "Raio",
 	}
 }
+
+// CREATE SPELL VALIDATION
+func TesCreateSpell_Validation(t *testing.T) {
+	usecase := SpellUsecase{
+		repo: newFakeSpellRepo(),
+	}
+
+	tests := []struct {
+		name     string
+		modify   func(s *domApi.SpellModel)
+		wantFail bool
+	}{
+		{
+			name:     "Valid Spell",
+			modify:   func(s *domApi.SpellModel) {},
+			wantFail: false,
+		},
+		{
+			name: "Invalid Name",
+			modify: func(s *domApi.SpellModel) {
+				s.Name = "A"
+			},
+			wantFail: true,
+		},
+		{
+			name: "Invalid Description",
+			modify: func(s *domApi.SpellModel) {
+				s.Description = "L"
+			},
+			wantFail: true,
+		},
+		{
+			name: "Invalid Mana Cost",
+			modify: func(s *domApi.SpellModel) {
+				s.ManaCost = -5
+			},
+			wantFail: true,
+		},
+		{
+			name: "Invalid Element",
+			modify: func(s *domApi.SpellModel) {
+				s.Element = "a"
+			},
+			wantFail: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			spell := ValidSpell()
+			tt.modify(&spell)
+
+			_, err := usecase.CreateSpell(spell)
+
+			if tt.wantFail && err == nil {
+				t.Errorf("Esperava Erro, Mas Veio Nil")
+			}
+
+			if !tt.wantFail && err != nil {
+				t.Errorf("Nao Esperava Erro, Mas Veio: %v", err)
+			}
+		})
+	}
+}
+
 func TestCreateSpell_Success(t *testing.T) {
 	repo := newFakeSpellRepo()
 
