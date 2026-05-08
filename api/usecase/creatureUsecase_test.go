@@ -467,7 +467,7 @@ func TestDeleteCreature_Success(t *testing.T) {
 }
 
 // TEACH SPELL TEST
-func TestTeachSpell_validation(t *testing.T) {
+func TestTeachSpell_Validation(t *testing.T) {
 	tests := []struct {
 		name           string
 		createCreature bool
