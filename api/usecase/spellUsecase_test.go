@@ -374,7 +374,49 @@ func TestUpdateSpell_Success(t *testing.T) {
 }
 
 //DELETE SPELL VALIDATION
+func TestDeleteSpell_Validation(t *testing.T) {
 
+	tests := []struct {
+		name       string
+		setup      func(repo *fakeSpellRepo) uuid.UUID
+		wantDelete bool
+	}{
+		{
+			name: "Spell Deleted",
+			setup: func(repo *fakeSpellRepo) uuid.UUID {
+				created := repo.Insert(ValidSpell())
+				return created.ID
+			},
+			wantDelete: true,
+		},
+		{
+			name: "Spell Not Found",
+			setup: func(repo *fakeSpellRepo) uuid.UUID {
+				return uuid.New()
+			},
+			wantDelete: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+
+			repo := newFakeSpellRepo()
+
+			usecase := CreatureUsecase{
+				spellRepo: repo,
+			}
+
+			id := tt.setup(repo)
+
+			_, ok := usecase.Delete(id)
+
+			if ok != tt.wantDelete {
+				t.Errorf("Esperava %v, Mas Veio %v", tt.wantDelete, ok)
+			}
+		})
+	}
+}
 func TestDeleteSpell_Success(t *testing.T) {
 	repo := newFakeSpellRepo()
 
@@ -402,6 +444,7 @@ func TestDeleteSpell_Success(t *testing.T) {
 	}
 }
 
+//GET ALL SPELLS VALIDATION
 func TestGetAllSpells(t *testing.T) {
 	repo := newFakeSpellRepo()
 
@@ -419,6 +462,7 @@ func TestGetAllSpells(t *testing.T) {
 	}
 }
 
+//SPELL BY ELEMENT VALIDATION
 func TestFindSpellByElement(t *testing.T) {
 	repo := newFakeSpellRepo()
 
