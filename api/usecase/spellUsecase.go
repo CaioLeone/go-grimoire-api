@@ -31,6 +31,10 @@ func (u *SpellUsecase) CreateSpell(spell domApi.SpellModel) (domApi.SpellModel, 
 		return domApi.SpellModel{}, errors.New("Invalid Description")
 	}
 
+	if len(spell.Element) < 2 {
+		return domApi.SpellModel{}, errors.New("Invalid Element")
+	}
+
 	if spell.ManaCost <= 0 {
 		return domApi.SpellModel{}, errors.New("Invalid Mana Cost")
 	}
@@ -52,6 +56,10 @@ func (u *SpellUsecase) Update(id uuid.UUID, s domApi.SpellModel) (domApi.SpellMo
 	}
 
 	if len(s.Description) < 2 {
+		return domApi.SpellModel{}, false
+	}
+
+	if len(s.Element) < 2 {
 		return domApi.SpellModel{}, false
 	}
 
