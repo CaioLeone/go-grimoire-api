@@ -373,6 +373,8 @@ func TestUpdateSpell_Success(t *testing.T) {
 	}
 }
 
+//DELETE SPELL VALIDATION
+
 func TestDeleteSpell_Success(t *testing.T) {
 	repo := newFakeSpellRepo()
 
