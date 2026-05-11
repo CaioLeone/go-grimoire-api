@@ -373,7 +373,7 @@ func TestUpdateSpell_Success(t *testing.T) {
 	}
 }
 
-//DELETE SPELL VALIDATION
+// DELETE SPELL VALIDATION
 func TestDeleteSpell_Validation(t *testing.T) {
 
 	tests := []struct {
@@ -444,7 +444,76 @@ func TestDeleteSpell_Success(t *testing.T) {
 	}
 }
 
-//GET ALL SPELLS VALIDATION
+// GET ALL SPELLS VALIDATION
+func TestGetAllSpells_Validation(t *testing.T) {
+	tests := []struct {
+		name      string
+		setup     func(repo *fakeSpellRepo)
+		wantCount int
+	}{
+		{
+			name: "Empty List",
+			setup: func(repo *fakeSpellRepo) {
+
+			},
+			wantCount: 0,
+		},
+		{
+			name: "One Spell",
+			setup: func(repo *fakeSpellRepo) {
+				repo.Insert(domApi.SpellModel{
+					Name:        "Fireboll",
+					Description: "Bola de fogo",
+					Element:     "Fire",
+					ManaCost:    10,
+				})
+			},
+			wantCount: 1,
+		},
+		{
+			name: "Multiple Spells",
+			setup: func(repo *fakeSpellRepo) {
+				repo.Insert(domApi.SpellModel{
+					Name:        "Fireball",
+					Description: "Bola de fogo",
+					Element:     "Fire",
+					ManaCost:    10,
+				})
+				repo.Insert(domApi.SpellModel{
+					Name:        "Lighting Spear",
+					Description: "Lancas de raio",
+					Element:     "Lighting",
+					ManaCost:    15,
+				})
+				repo.Insert(domApi.SpellModel{
+					Name:        "Thunder Hammer",
+					Description: "Marreta de Raio",
+					Element:     "Electric",
+					ManaCost:    12,
+				})
+			},
+			wantCount: 3,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			repo := newFakeSpellRepo()
+
+			usecase := SpellUsecase{
+				repo: repo,
+			}
+
+			tt.setup(repo)
+
+			result := usecase.GetAll()
+
+			if len(result) != tt.wantCount {
+				t.Errorf("Esperava %d spells, mas veio %d", tt.wantCount, len(result))
+			}
+		})
+	}
+}
+
 func TestGetAllSpells(t *testing.T) {
 	repo := newFakeSpellRepo()
 
@@ -462,7 +531,7 @@ func TestGetAllSpells(t *testing.T) {
 	}
 }
 
-//SPELL BY ELEMENT VALIDATION
+// SPELL BY ELEMENT VALIDATION
 func TestFindSpellByElement(t *testing.T) {
 	repo := newFakeSpellRepo()
 
