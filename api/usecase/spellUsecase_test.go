@@ -532,6 +532,109 @@ func TestGetAllSpells(t *testing.T) {
 }
 
 // SPELL BY ELEMENT VALIDATION
+func TestFindSpellByElement_Validation(t *testing.T) {
+	tests := []struct {
+		name      string
+		setup     func(repo *fakeSpellRepo)
+		element   string
+		wantCount int
+		wantError bool
+	}{
+		{
+			name: "Success - One Fire Spell",
+			setup: func(repo *fakeSpellRepo) {
+				fire := ValidSpell()
+				fire.Name = "Fireball"
+				fire.Element = "Fire"
+
+				ice := ValidSpell()
+				ice.Name = "Ice Spike"
+				ice.Element = "ice"
+
+				repo.Insert(fire)
+				repo.Insert(ice)
+			},
+			element:   "Fire",
+			wantCount: 1,
+			wantError: false,
+		},
+		{
+			name: "Success - Multiple Fire Spells",
+			setup: func(repo *fakeSpellRepo) {
+				fire1 := ValidSpell()
+				fire1.Name = "Fireball"
+				fire1.Element = "Fire"
+
+				fire2 := ValidSpell()
+				fire2.Name = "Flame Tornado"
+				fire2.Element = "Fire"
+
+				repo.Insert(fire1)
+				repo.Insert(fire2)
+			},
+			element:   "Fire",
+			wantCount: 2,
+			wantError: false,
+		},
+		{
+			name: "Fail - Element Not Found",
+			setup: func(repo *fakeSpellRepo) {
+				ice := ValidSpell()
+				ice.Name = "Ice Spike"
+				ice.Element = "Ice"
+
+				repo.Insert(ice)
+			},
+			element:   "Fire",
+			wantCount: 0,
+			wantError: true,
+		},
+		{
+			name: "Fail - Empty Repository",
+			setup: func(repo *fakeSpellRepo) {
+
+			},
+			element:   "Fire",
+			wantCount: 0,
+			wantError: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			repo := newFakeSpellRepo()
+
+			usecase := SpellUsecase{
+				repo: repo,
+			}
+
+			tt.setup(repo)
+
+			result, err := usecase.GetByElement(tt.element)
+
+			//valida erro
+			if tt.wantError && err == nil {
+				t.Errorf("Esperava Erro, Mais Veio Nil")
+			}
+
+			if !tt.wantError && err != nil {
+				t.Errorf("Nao Esperava Erro, Mas Veio: %v", err)
+			}
+
+			//Valida Quantidade
+			if len(result) != tt.wantCount {
+				t.Errorf("Esperava %d Spells, Mas Veio %d", tt.wantCount, len(result))
+			}
+
+			//Valida Se Todos Os Elementos Retornados Sao Corretos
+			for _, spell := range result {
+				if spell.Element != tt.element {
+					t.Errorf("Esperava Element %s, Mas Veio %s", tt.element, spell.Element)
+				}
+			}
+		})
+	}
+}
+
 func TestFindSpellByElement(t *testing.T) {
 	repo := newFakeSpellRepo()
 
