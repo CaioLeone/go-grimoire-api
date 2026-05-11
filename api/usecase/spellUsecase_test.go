@@ -514,23 +514,6 @@ func TestGetAllSpells_Validation(t *testing.T) {
 	}
 }
 
-func TestGetAllSpells(t *testing.T) {
-	repo := newFakeSpellRepo()
-
-	usecase := SpellUsecase{
-		repo: repo,
-	}
-
-	repo.Insert(domApi.SpellModel{Name: "Fire"})
-	repo.Insert(domApi.SpellModel{Name: "Ice"})
-
-	result := usecase.GetAll()
-
-	if len(result) != 2 {
-		t.Errorf("Esperava 2 Spells, veioi %d", len(result))
-	}
-}
-
 // SPELL BY ELEMENT VALIDATION
 func TestFindSpellByElement_Validation(t *testing.T) {
 	tests := []struct {
