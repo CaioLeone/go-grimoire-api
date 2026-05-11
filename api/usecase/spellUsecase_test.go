@@ -403,8 +403,8 @@ func TestDeleteSpell_Validation(t *testing.T) {
 
 			repo := newFakeSpellRepo()
 
-			usecase := CreatureUsecase{
-				spellRepo: repo,
+			usecase := SpellUsecase{
+				repo: repo,
 			}
 
 			id := tt.setup(repo)
