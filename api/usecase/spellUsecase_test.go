@@ -95,7 +95,7 @@ func ValidSpell() domApi.SpellModel {
 }
 
 // CREATE SPELL VALIDATION
-func TesCreateSpell_Validation(t *testing.T) {
+func TestCreateSpell_Validation(t *testing.T) {
 	usecase := SpellUsecase{
 		repo: newFakeSpellRepo(),
 	}
