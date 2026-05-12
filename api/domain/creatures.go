@@ -9,5 +9,5 @@ type CreatureModel struct {
 	Hp          int          `json:"hp"`
 	Attack      int          `json:"attack"`
 	Defence     int          `json:"defence"`
-	Spells      []SpellModel `json:"teach_spell,omitempty"`
+	Spells      []SpellModel `json:"spells,omitempty"`
 }
