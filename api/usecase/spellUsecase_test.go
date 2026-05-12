@@ -462,7 +462,7 @@ func TestGetAllSpells_Validation(t *testing.T) {
 			name: "One Spell",
 			setup: func(repo *fakeSpellRepo) {
 				repo.Insert(domApi.SpellModel{
-					Name:        "Fireboll",
+					Name:        "Fireball",
 					Description: "Bola de fogo",
 					Element:     "Fire",
 					ManaCost:    10,
