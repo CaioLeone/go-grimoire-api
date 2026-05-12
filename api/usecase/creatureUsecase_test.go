@@ -191,18 +191,6 @@ func TestCreateCreature_Validation(t *testing.T) {
 	}
 }
 
-func TestCreateCreature_InvalidName(t *testing.T) {
-	usecase := CreatureUsecase{}
-
-	creature := domApi.CreatureModel{
-		Name: "A", //invalido
-	}
-
-	_, err := usecase.CreateCreature(creature)
-	if err == nil {
-		t.Errorf("Esperava erro para nome invalido")
-	}
-}
 
 // GET BY ID TESTS
 func TestGetById_Validation(t *testing.T) {

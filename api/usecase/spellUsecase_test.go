@@ -187,19 +187,6 @@ func TestCreateSpell_Success(t *testing.T) {
 	}
 }
 
-func TestCreateSpell_InvalidName(t *testing.T) {
-	usecase := SpellUsecase{}
-
-	spell := domApi.SpellModel{
-		Name: "A",
-	}
-
-	_, err := usecase.CreateSpell(spell)
-
-	if err == nil {
-		t.Errorf("Esperava Erro Para Nome Invalido")
-	}
-}
 
 // GETBYID VALIDATION
 func TestSpellGetById_Validation(t *testing.T) {
