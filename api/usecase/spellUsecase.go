@@ -16,29 +16,30 @@ func NewSpellUseCase(repo repoApi.SpellRepository) *SpellUsecase {
 	return &SpellUsecase{repo: repo}
 }
 
-func (u *SpellUsecase) CreateSpell(spell domApi.SpellModel) (domApi.SpellModel, error) {
-
-	//_, exists := u.repo.FindByName(spell.Name)
-	// if exists {
-	// 	return domApi.SpellModel{}, errors.New("Spell Already Exists")
-	// }
-
-	if len(spell.Name) <= 2 {
-		return domApi.SpellModel{}, errors.New("Invalid Name")
+func validateSpell(spell domApi.SpellModel) error {
+	if len(spell.Name) < 2 {
+		return errors.New("Invalid Name")
 	}
 
 	if len(spell.Description) < 2 {
-		return domApi.SpellModel{}, errors.New("Invalid Description")
+		return errors.New("Invalid Description")
 	}
 
 	if len(spell.Element) < 2 {
-		return domApi.SpellModel{}, errors.New("Invalid Element")
+		return errors.New("Invalid Element")
 	}
 
 	if spell.ManaCost <= 0 {
-		return domApi.SpellModel{}, errors.New("Invalid Mana Cost")
+		return errors.New("Invalid Mana Cost")
 	}
 
+	return nil
+}
+
+func (u *SpellUsecase) CreateSpell(spell domApi.SpellModel) (domApi.SpellModel, error) {
+	if err := validateSpell(spell); err != nil {
+		return domApi.SpellModel{}, err
+	}
 	return u.repo.Insert(spell), nil
 }
 
@@ -51,19 +52,7 @@ func (u *SpellUsecase) GetById(id uuid.UUID) (domApi.SpellModel, bool) {
 }
 
 func (u *SpellUsecase) Update(id uuid.UUID, s domApi.SpellModel) (domApi.SpellModel, bool) {
-	if len(s.Name) <= 2 {
-		return domApi.SpellModel{}, false
-	}
-
-	if len(s.Description) < 2 {
-		return domApi.SpellModel{}, false
-	}
-
-	if len(s.Element) < 2 {
-		return domApi.SpellModel{}, false
-	}
-
-	if s.ManaCost <= 0 {
+	if err := validateSpell(s); err != nil {
 		return domApi.SpellModel{}, false
 	}
 

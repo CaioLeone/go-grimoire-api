@@ -20,27 +20,34 @@ func NewCreatureUseCase(creatureRepo repoApi.CreatureRepository, spellRepo repoA
 	}
 }
 
-func (u *CreatureUsecase) CreateCreature(creature domApi.CreatureModel) (domApi.CreatureModel, error) {
-
-	//VALIDACAO
+func validateCreature(creature domApi.CreatureModel) error {
 	if len(creature.Name) < 2 {
-		return domApi.CreatureModel{}, errors.New("Invalid Name")
+		return errors.New("Invalid Name")
 	}
 
 	if len(creature.Description) < 2 {
-		return domApi.CreatureModel{}, errors.New("Invalid Description")
+		return errors.New("Invalid Description")
 	}
 
 	if creature.Attack <= 0 {
-		return domApi.CreatureModel{}, errors.New("Invalid Attack")
+		return errors.New("Invalid Attack")
 	}
 
 	if creature.Defence <= 0 {
-		return domApi.CreatureModel{}, errors.New("Invalid Defence")
+		return errors.New("Invalid Defence")
 	}
 
 	if creature.Hp <= 0 {
-		return domApi.CreatureModel{}, errors.New("Invalid Hp")
+		return errors.New("Invalid Hp")
+	}
+
+	return nil
+}
+
+func (u *CreatureUsecase) CreateCreature(creature domApi.CreatureModel) (domApi.CreatureModel, error) {
+
+	if err := validateCreature(creature); err != nil {
+		return domApi.CreatureModel{}, err
 	}
 
 	return u.creatureRepo.Insert(creature), nil
@@ -55,23 +62,7 @@ func (u *CreatureUsecase) GetById(id uuid.UUID) (domApi.CreatureModel, bool) {
 }
 
 func (u *CreatureUsecase) Update(id uuid.UUID, c domApi.CreatureModel) (domApi.CreatureModel, bool) {
-	if len(c.Name) < 2 {
-		return domApi.CreatureModel{}, false
-	}
-
-	if len(c.Description) < 2 {
-		return domApi.CreatureModel{}, false
-	}
-
-	if c.Attack <= 0 {
-		return domApi.CreatureModel{}, false
-	}
-
-	if c.Defence <= 0 {
-		return domApi.CreatureModel{}, false
-	}
-
-	if c.Hp <= 0 {
+	if err := validateCreature(c); err != nil {
 		return domApi.CreatureModel{}, false
 	}
 
