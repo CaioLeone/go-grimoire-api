@@ -126,57 +126,6 @@ A API será responsável por gerenciar:
   * ```creatures```
   * ```creature_spells``` (Relacionamento)
 
-
-## "Banco de Dados" em Memória
-
-Inicialmente, utilizaremos um armazenamento em memória com map.
-```
-type ID string
-
-type Spell struct {
-	ID          ID
-	Name        string
-	Description string
-	ManaCost    int
-	Element     string
-}
-
-type Creature struct {
-	ID          ID
-	Name        string
-	Description string
-	HP          int
-	Attack      int
-	Defense     int
-}
-
-type Application struct {
-	spells    map[ID]Spell
-	creatures map[ID]Creature
-}
-```
-
-
-
-## Operações do Repositório
-* Magias
-  1. FindAll()
-  2. FindSpellByID(id)
-  3. FindByElement()
-  4. FindWithFilters()
-  5. InsertSpell(spell)
-  6. UpdateSpell(id, spell)
-  7. DeleteSpell(id)
-
-* Criaturas
-  1. FindAllCreatures()
-  2. FindCreatureByID(id)
-  3. FindWithFilters()
-  4. TeachSpells()
-  5. InsertCreature(creature)
-  6. UpdateCreature(id, creature)
-  7. DeleteCreature(id)
-
 ## Endpoints da API
 ### Magias
 ```
@@ -222,6 +171,11 @@ GET /api/creature?page=1&limit=10
 ?sort=mana_cost&order=desc
 ```
 
+## Middlewares
+* Logging
+* Recovery
+* RequestID
+
 ## Padrão de Erro
 
 Todas as respostas de erro devem seguir:
@@ -230,12 +184,6 @@ Todas as respostas de erro devem seguir:
   "error": "mensagem descritiva"
 }
 ```
-
-## Middlewares
-* Logging
-* Recovery
-* RequestID
-
 
 ## Testes Automatizados
 O projeto possui testes automatizados para a camada de Usecase:
@@ -309,6 +257,55 @@ http://localhost:8080
   * Insomnia
   * Postman
   * Curl
+
+## "Banco de Dados" em Memória
+
+Inicialmente, utilizaremos um armazenamento em memória com map.
+```
+type ID string
+
+type Spell struct {
+	ID          ID
+	Name        string
+	Description string
+	ManaCost    int
+	Element     string
+}
+
+type Creature struct {
+	ID          ID
+	Name        string
+	Description string
+	HP          int
+	Attack      int
+	Defense     int
+}
+
+type Application struct {
+	spells    map[ID]Spell
+	creatures map[ID]Creature
+}
+```
+
+## Operações do Repositório
+* Magias
+  1. FindAll()
+  2. FindSpellByID(id)
+  3. FindByElement()
+  4. FindWithFilters()
+  5. InsertSpell(spell)
+  6. UpdateSpell(id, spell)
+  7. DeleteSpell(id)
+
+* Criaturas
+  1. FindAllCreatures()
+  2. FindCreatureByID(id)
+  3. FindWithFilters()
+  4. TeachSpells()
+  5. InsertCreature(creature)
+  6. UpdateCreature(id, creature)
+  7. DeleteCreature(id)
+
   
 
 ## Estrutura do Projeto (Clean Architecture - Simplificado)
@@ -348,13 +345,20 @@ http://localhost:8080
 - [X] Ordenação
 - [X] Paginação
 - [X] Clean Architecture básica
+- [X] Swagger
+- [X] Testes Automatizados
 
 ## Próximos Desafios (Upgrade do Projeto)
 
 Se quiser evoluir depois:
 
-- [X] Swagger
-- [ ] Autenticação (API Key ou JWT)
-- [ ] Cache (Redis)
-- [X] Testes Automatizados
-- [ ] Deploy (Vercel / Railway / Fly.io)
+- [ ] Autenticação JWT
+- [ ] Cache com Redis
+- [ ] Docker
+- [ ] Deploy em produção
+- [ ] CI/CD
+- [ ] Rate Limiting
+- [ ] Logs estruturados
+
+## Objetivo do Projeto
+Este projeto foi desenvolvido como parte da jornada de aprendizado em backend com Go, com foco na construção de APIs RESTful organizadas, testáveis e escaláveis utilizando boas práticas de arquitetura e separação de responsabilidades.
