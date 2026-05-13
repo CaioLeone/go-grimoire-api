@@ -1,26 +1,60 @@
-# API REST - Grimório de Magias e Criaturas
+# API REST - Go Grimório API
 ## Conheça o Projeto
 
-Este projeto é um desafio prático em Go para construção de uma API RESTful com temática de fantasia, focado no gerenciamento de ***Magias*** e ***Criaturas***. 
+O ***Go Grimoire API*** é um projeto prático em Go com foco na construção de uma API RESTful com temática de fantasia, focado no gerenciamento de ***Magias*** e ***Criaturas***. 
 
-O objetivo é evoluir de um CRUD simples para uma arquitetura mais robusta, aplicando conceitos como: 
-* Clean Architecture (básico)
-* Separação de responsabilidade
-* Persistencia com SQLite
-* Relacionamentos enre entidades
-* Filtros, ordenação e paginação
+O projet foi cirado com o objetivo de evoluir de um CRUD simples para uma arquitetura mais organizada e escalável, aplicando conceitos modernos de desenvolvimento backend utilziando Go.
 
 ## Objetivos de Aprendizado
+* Desenvolvimento de APIs RESTful com Go
 * Trabalhar com ```net/http```
 * Manipulação de JSON
 * Uso de router ```chi```
 * Estruturação de projetos em Go
-* Aplicação de Clean Architecture
+* Clean Architecture
 * Uso de interfaces
-* Criação de middlewares
+* Middlewares
 * Persistência com SQLite 
 * Queries dinâmicas (filtros)
 * Paginação e ordenação
+* Separação de responsabilidade
+* Relacionamentos enre entidades
+
+## Tecnologias Utilizadas
+* Go
+* Chi Router
+* SQLite
+* Swagger
+* UUID
+* JSON
+* REST API
+* database/sql
+
+## Estrutura do Projeto
+```
+├── .dist
+├── api
+│   ├── domain
+│   ├── handler
+│   ├── repository
+│   └── usecase
+└── docs
+```
+
+## Arquitetura
+
+O projeto segue uma estrutura inspirada em Clean Architecture
+```
+/api
+  /domain     -> entidades
+  /usecase    -> regras de negocio
+  /repository -> acesso a dados (memory / sqlite)
+  /handler    -> camada HTTP
+```
+
+Fluxo:
+
+```Handler -> Usecase -> Repository -> Banco```
 
 ## Domínio da Aplicação
 
@@ -43,12 +77,12 @@ A API será responsável por gerenciar:
 
 * Regras:
 
-  1. name: obrigatório (mín. 3, máx. 50)
-  2. description: obrigatório (mín. 10, máx. 300)
+  1. name: obrigatório (mín. 2)
+  2. description: obrigatório (mín. 2)
   3. mana_cost: obrigatório (> 0)
   4. element: obrigatório (ex: Fogo, Gelo, Arcano)
 
-2. ***Criatura (Creature)***
+1. ***Criatura (Creature)***
 ```
 {
   "id": "", // UUID, obrigatório
@@ -61,8 +95,8 @@ A API será responsável por gerenciar:
 }
 ```
 * Regras:
-  1. name: obrigatório (mín. 3, máx. 50)
-  2. description: obrigatório (mín. 10, máx. 300)
+  1. name: obrigatório (mín. 2)
+  2. description: obrigatório (mín. 2)
   3. hp, attack, defense: obrigatórios (> 0)
 
 * Relacionamento:
@@ -77,6 +111,21 @@ A API será responsável por gerenciar:
   ]
 }
 ```
+
+## Persistencia
+
+1. Em memória
+  * Uso de ```map``` para simular banco
+
+2. SQLite
+  * ```database/sql```
+  * driver: ```github.com/mattn/go-sqlite3```
+
+3. Tabelas:
+  * ```spells```
+  * ```creatures```
+  * ```creature_spells``` (Relacionamento)
+
 
 ## "Banco de Dados" em Memória
 
@@ -106,34 +155,8 @@ type Application struct {
 	creatures map[ID]Creature
 }
 ```
-## Arquitetura
 
-O projeto segue uma estrutura inspirada em Clean Architecture
-```
-/api
-  /domain     -> entidades
-  /usecase    -> regras de negocio
-  /repository -> acesso a dados (memory / sqlite)
-  /handler    -> camada HTTP
-```
 
-Fluxo:
-
-```Handler -> Usecase -> Repository -> Banco```
-
-## Persistencia
-
-1. Em memória
-  * Uso de ```map``` para simular banco
-
-2. SQLite
-  * ```database/sql```
-  * driver: ```github.com/mattn/go-sqlite3```
-
-3. Tabelas:
-  * ```spells```
-  * ```creatures```
-  * ```creature_spells``` (Relacionamento)
 
 ## Operações do Repositório
 * Magias
@@ -213,11 +236,80 @@ Todas as respostas de erro devem seguir:
 * Recovery
 * RequestID
 
-## Testes
+
+## Testes Automatizados
+O projeto possui testes automatizados para a camada de Usecase:
+
+### Cobertura Atual
+* Create Spell
+* Update Spell
+* Delete Spell
+* Get Spell By ID
+* Get Spell By Element
+* Get All Spells
+* Create Creature
+* Update Creature
+* Delete Creature
+* Get Creature By ID
+* Teach Spell
+* Validações de regras de negócio
+
+### Executar Testes
+```
+go test ./...
+```
+
+## Swagger
+### Gerar documentação
+```
+swag init
+```
+
+### Acessar Swagger
+```
+http://localhost:8080/swagger/index.html
+```
+
+Arquivos gerados:
+```
+/docs
+  docs.go
+  swagger.json
+  swagger.yaml
+```
+
+## Como Executar Localmente
+### Clone do projeto
+```
+git clone https://github.com/caioleone/go-grimoire-api.git
+```
+
+### Entre na pasta
+```
+cd go-grimoire-api
+```
+
+### Instale dependencias
+```
+go mod tidy
+```
+
+### Execute o projeto
+```
+go run .
+```
+
+Servidor 
+```
+http://localhost:8080
+```
+
+## Ferramentas para testar a API 
 * Usuario pode testar usando:
   * Insomnia
   * Postman
   * Curl
+  
 
 ## Estrutura do Projeto (Clean Architecture - Simplificado)
 ```
