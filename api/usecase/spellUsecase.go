@@ -33,6 +33,14 @@ func validateSpell(spell domApi.SpellModel) error {
 		return errors.New("Invalid Mana Cost")
 	}
 
+	if len(spell.Type) < 2 {
+		return errors.New("Invalid Type")
+	}
+
+	if spell.Power <= 0 {
+		return errors.New("Invalid Power")
+	}
+
 	return nil
 }
 
