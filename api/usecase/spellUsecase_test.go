@@ -91,6 +91,8 @@ func ValidSpell() domApi.SpellModel {
 		Description: "Lancas de raios caem do ceu",
 		ManaCost:    5,
 		Element:     "Raio",
+		Type:        "Ataque",
+		Power:       15,
 	}
 }
 
@@ -135,6 +137,20 @@ func TestCreateSpell_Validation(t *testing.T) {
 			name: "Invalid Element",
 			modify: func(s *domApi.SpellModel) {
 				s.Element = "a"
+			},
+			wantFail: true,
+		},
+		{
+			name: "Invalid Type",
+			modify: func(s *domApi.SpellModel) {
+				s.Type = "a"
+			},
+			wantFail: true,
+		},
+		{
+			name: "Invalid Powe",
+			modify: func(s *domApi.SpellModel) {
+				s.Power = -1
 			},
 			wantFail: true,
 		},
@@ -186,7 +202,6 @@ func TestCreateSpell_Success(t *testing.T) {
 		t.Errorf("Nome Incorreto")
 	}
 }
-
 
 // GETBYID VALIDATION
 func TestSpellGetById_Validation(t *testing.T) {
@@ -264,6 +279,8 @@ func TestUpdateSpell_Validation(t *testing.T) {
 				Description: "Torre de chamas surge e queima tudo",
 				ManaCost:    10,
 				Element:     "Fogo",
+				Type:        "Ataque",
+				Power:       50,
 			},
 			wantOK: true,
 		},
@@ -299,6 +316,24 @@ func TestUpdateSpell_Validation(t *testing.T) {
 			payload: func() domApi.SpellModel {
 				s := ValidSpell()
 				s.Element = "A"
+				return s
+			}(),
+			wantOK: false,
+		},
+		{
+			name: "Fail - Invalid Type",
+			payload: func() domApi.SpellModel {
+				s := ValidSpell()
+				s.Type = "A"
+				return s
+			}(),
+			wantOK: false,
+		},
+		{
+			name: "Fail - Invalid Power",
+			payload: func() domApi.SpellModel {
+				s := ValidSpell()
+				s.Power = -5
 				return s
 			}(),
 			wantOK: false,
@@ -453,6 +488,8 @@ func TestGetAllSpells_Validation(t *testing.T) {
 					Description: "Bola de fogo",
 					Element:     "Fire",
 					ManaCost:    10,
+					Type:        "Ataque",
+					Power:       10,
 				})
 			},
 			wantCount: 1,
@@ -465,18 +502,24 @@ func TestGetAllSpells_Validation(t *testing.T) {
 					Description: "Bola de fogo",
 					Element:     "Fire",
 					ManaCost:    10,
+					Type:        "Ataque",
+					Power:       10,
 				})
 				repo.Insert(domApi.SpellModel{
 					Name:        "Lighting Spear",
 					Description: "Lancas de raio",
 					Element:     "Lighting",
 					ManaCost:    15,
+					Type:        "Ataque",
+					Power:       15,
 				})
 				repo.Insert(domApi.SpellModel{
 					Name:        "Thunder Hammer",
 					Description: "Marreta de Raio",
 					Element:     "Electric",
 					ManaCost:    12,
+					Type:        "Ataque",
+					Power:       20,
 				})
 			},
 			wantCount: 3,
