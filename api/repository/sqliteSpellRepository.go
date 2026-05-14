@@ -20,7 +20,7 @@ func (r *SQLiteSpellRepository) Insert(spell domApi.SpellModel) domApi.SpellMode
 	spell.ID = uuid.New()
 
 	query := `
-		INSERT INTO spells(id, name, description, element, mana_cost)
+		INSERT INTO spells(id, name, description, element, mana_cost, type, power)
 		VALUES (?, ?, ?, ?, ?)
 	`
 
@@ -30,13 +30,15 @@ func (r *SQLiteSpellRepository) Insert(spell domApi.SpellModel) domApi.SpellMode
 		spell.Description,
 		spell.Element,
 		spell.ManaCost,
+		spell.Type,
+		spell.Power,
 	)
 
 	return spell
 }
 
 func (r *SQLiteSpellRepository) FindAll() []domApi.SpellModel {
-	rows, _ := r.db.Query("SELECT id, name, description, element, mana_cost FROM spells")
+	rows, _ := r.db.Query("SELECT id, name, description, element, mana_cost, type, power FROM spells")
 	defer rows.Close()
 
 	var spells []domApi.SpellModel
@@ -45,7 +47,7 @@ func (r *SQLiteSpellRepository) FindAll() []domApi.SpellModel {
 		var s domApi.SpellModel
 		var id string
 
-		rows.Scan(&id, &s.Name, &s.Description, &s.Element, &s.ManaCost)
+		rows.Scan(&id, &s.Name, &s.Description, &s.Element, &s.ManaCost, &s.Type, &s.Power)
 		s.ID, _ = uuid.Parse(id)
 
 		spells = append(spells, s)
@@ -54,7 +56,7 @@ func (r *SQLiteSpellRepository) FindAll() []domApi.SpellModel {
 	return spells
 }
 func (r *SQLiteSpellRepository) FindById(id uuid.UUID) (domApi.SpellModel, bool) {
-	query := `SELECT id, name, description, element, mana_cost FROM spells WHERE id = ?`
+	query := `SELECT id, name, description, element, mana_cost, type, power FROM spells WHERE id = ?`
 
 	row := r.db.QueryRow(query, id.String())
 
@@ -67,6 +69,8 @@ func (r *SQLiteSpellRepository) FindById(id uuid.UUID) (domApi.SpellModel, bool)
 		&spell.Description,
 		&spell.Element,
 		&spell.ManaCost,
+		&spell.Type,
+		&spell.Power,
 	)
 	if err != nil {
 		return domApi.SpellModel{}, false
@@ -77,13 +81,15 @@ func (r *SQLiteSpellRepository) FindById(id uuid.UUID) (domApi.SpellModel, bool)
 }
 
 func (r *SQLiteSpellRepository) Update(id uuid.UUID, spell domApi.SpellModel) (domApi.SpellModel, bool) {
-	query := `UPDATE spells SET name = ?, description = ?, element = ?, mana_cost = ? WHERE id = ?`
+	query := `UPDATE spells SET name = ?, description = ?, element = ?, mana_cost = ?, type = ?, power = ? WHERE id = ?`
 	result, err := r.db.Exec(
 		query,
 		spell.Name,
 		spell.Description,
 		spell.Element,
 		spell.ManaCost,
+		spell.Type,
+		spell.Power,
 		id.String(),
 	)
 	if err != nil {
@@ -119,7 +125,7 @@ func (r *SQLiteSpellRepository) Delete(id uuid.UUID) (domApi.SpellModel, bool) {
 
 func (r *SQLiteSpellRepository) FindByElement(element string) []domApi.SpellModel {
 	query := `
-		SELECT id, name, description, element, mana_cost 
+		SELECT id, name, description, element, mana_cost, type, power
 		FROM spells
 		WHERE LOWER(element) = LOWER(?)
 	`
@@ -142,6 +148,8 @@ func (r *SQLiteSpellRepository) FindByElement(element string) []domApi.SpellMode
 			&s.Description,
 			&s.Element,
 			&s.ManaCost,
+			&s.Type,
+			&s.Power,
 		)
 
 		if err != nil {
@@ -157,7 +165,7 @@ func (r *SQLiteSpellRepository) FindByElement(element string) []domApi.SpellMode
 
 func (r *SQLiteSpellRepository) FindAllPaginated(limit, offset int) []domApi.SpellModel {
 	query := `
-		SELECT id, name, description, element, mana_cost 
+		SELECT id, name, description, element, mana_cost, type, power
 		FROM spells
 		LIMIT ? OFFSET ?
 	`
@@ -180,6 +188,8 @@ func (r *SQLiteSpellRepository) FindAllPaginated(limit, offset int) []domApi.Spe
 			&s.Description,
 			&s.Element,
 			&s.ManaCost,
+			&s.Type,
+			&s.Power,
 		)
 
 		if err != nil {
@@ -195,7 +205,7 @@ func (r *SQLiteSpellRepository) FindAllPaginated(limit, offset int) []domApi.Spe
 
 func (r *SQLiteSpellRepository) FindWithFilters(name, element, sort, order string, limit, offset int) []domApi.SpellModel {
 	query := `
-		SELECT id, name, description, element, mana_cost 
+		SELECT id, name, description, element, mana_cost, type, power 
 		FROM spells
 		WHERE 1=1
 	`
@@ -216,7 +226,7 @@ func (r *SQLiteSpellRepository) FindWithFilters(name, element, sort, order strin
 
 	//Ordenacao segura
 	validSort := map[string]bool{
-		"name":       true,
+		"name":      true,
 		"mana_cost": true,
 	}
 
@@ -248,6 +258,8 @@ func (r *SQLiteSpellRepository) FindWithFilters(name, element, sort, order strin
 			&s.Description,
 			&s.Element,
 			&s.ManaCost,
+			&s.Type,
+			&s.Power,
 		)
 		if err != nil {
 			continue
@@ -262,7 +274,7 @@ func (r *SQLiteSpellRepository) FindWithFilters(name, element, sort, order strin
 
 func (r *SQLiteSpellRepository) FindByName(name string) (domApi.SpellModel, bool) {
 	query := `
-		SELECT id, name, description, element, mana_cost 
+		SELECT id, name, description, element, mana_cost, type, power 
 		FROM spells
 		WHERE Lower(name) = LOWER(?)
 	`
@@ -277,6 +289,8 @@ func (r *SQLiteSpellRepository) FindByName(name string) (domApi.SpellModel, bool
 		&spell.Description,
 		&spell.Element,
 		&spell.ManaCost,
+		&spell.Type,
+		&spell.Power,
 	)
 	if err != nil {
 		return domApi.SpellModel{}, false
