@@ -72,6 +72,8 @@ A API será responsável por gerenciar:
   "description": "Uma explosão flamejante devastadora",
   "mana_cost": 50,
   "element": "Fogo"
+  "type": "Ataque"
+  "power": "15"
 }
 ```
 
@@ -81,6 +83,8 @@ A API será responsável por gerenciar:
   2. description: obrigatório (mín. 2)
   3. mana_cost: obrigatório (> 0)
   4. element: obrigatório (ex: Fogo, Gelo, Arcano)
+  5. type: obrigatorio (ex: Ataque, defesa, cura, maldição)
+  6. power: obrigatorio (> 0)
 
 1. ***Criatura (Creature)***
 ```
@@ -270,6 +274,8 @@ type Spell struct {
 	Description string
 	ManaCost    int
 	Element     string
+  Type        string
+  Power       int
 }
 
 type Creature struct {
