@@ -22,7 +22,9 @@ func InitDB(db *sql.DB) error {
 			name TEXT,
 			description TEXT,
 			element TEXT,
-			mana_cost INTEGER
+			mana_cost INTEGER,
+			type TEXT,
+			power INTEGER
 		);`
 
 	queryCreature := `
