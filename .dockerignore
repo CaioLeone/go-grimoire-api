@@ -3,3 +3,5 @@
 temp
 vendor
 *.db
+*.exe
+README.md
