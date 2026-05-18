@@ -1,4 +1,7 @@
 {
+    "schemes": [
+        "https"
+    ],
     "swagger": "2.0",
     "info": {
         "description": "API De Magias e Criaturas",
@@ -6,7 +9,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "go-grimoire-api.onrender.com",
     "basePath": "/",
     "paths": {
         "/api/creature": {
@@ -560,7 +563,7 @@
                 "name": {
                     "type": "string"
                 },
-                "teach_spell": {
+                "spells": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/api.SpellModel"
@@ -593,6 +596,12 @@
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "power": {
+                    "type": "integer"
+                },
+                "type": {
                     "type": "string"
                 }
             }

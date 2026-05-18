@@ -14,7 +14,7 @@ definitions:
         type: string
       name:
         type: string
-      teach_spell:
+      spells:
         items:
           $ref: '#/definitions/api.SpellModel'
         type: array
@@ -37,8 +37,12 @@ definitions:
         type: integer
       name:
         type: string
+      power:
+        type: integer
+      type:
+        type: string
     type: object
-host: localhost:8080
+host: go-grimoire-api.onrender.com
 info:
   contact: {}
   description: API De Magias e Criaturas
@@ -391,4 +395,6 @@ paths:
       summary: Lista magias por elemento
       tags:
       - spells
+schemes:
+- https
 swagger: "2.0"

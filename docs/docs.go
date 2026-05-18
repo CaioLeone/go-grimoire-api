@@ -566,7 +566,7 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "teach_spell": {
+                "spells": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/api.SpellModel"
@@ -600,6 +600,12 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "power": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         }
@@ -609,9 +615,9 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "go-grimoire-api.onrender.com",
 	BasePath:         "/",
-	Schemes:          []string{},
+	Schemes:          []string{"https"},
 	Title:            "Grimorio API",
 	Description:      "API De Magias e Criaturas",
 	InfoInstanceName: "swagger",

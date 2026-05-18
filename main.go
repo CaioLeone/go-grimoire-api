@@ -3,7 +3,8 @@ package main
 // @title Grimorio API
 // @version 1.0
 // @description API De Magias e Criaturas
-// @host
+// @host go-grimoire-api.onrender.com
+// @schemes https
 // @BasePath /
 
 import (
