@@ -211,6 +211,9 @@ O projeto possui testes automatizados para a camada de Usecase:
 go test ./...
 ```
 
+## API:
+https://go-grimoire-api.onrender.com
+
 ## Swagger
 ### Gerar documentação
 ```
@@ -219,7 +222,7 @@ swag init
 
 ### Acessar Swagger
 ```
-http://localhost:8080/swagger/index.html
+https://go-grimoire-api.onrender.com/swagger/index.html
 ```
 
 Arquivos gerados:
