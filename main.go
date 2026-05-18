@@ -3,12 +3,13 @@ package main
 // @title Grimorio API
 // @version 1.0
 // @description API De Magias e Criaturas
-// @host localhost:8080
+// @host
 // @BasePath /
 
 import (
 	"log/slog"
 	"net/http"
+	"os"
 	"time"
 
 	handlerApi "github.com/caioleone/go-grimoire-api/api/handler"
@@ -54,9 +55,15 @@ func run() error {
 	spellHandler := handlerApi.NewHandlerSpell(spellUsecase)
 	creatureHandler := handlerApi.NewHandlerCreature(creatureUsecase)
 
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "8080"
+	}
+
 	r := chi.NewMux()
 
-	r.Get("/swagger/*", httpSwagger.Handler(httpSwagger.URL("http://localhost:8080/swagger/doc.json")))
+	r.Get("/swagger/*", httpSwagger.Handler(httpSwagger.URL("/swagger/doc.json")))
 
 	r.Mount("/api/spell", spellHandler)
 	r.Mount("/api/creature", creatureHandler)
@@ -65,7 +72,7 @@ func run() error {
 		ReadTimeout:  10 * time.Second,
 		IdleTimeout:  time.Minute,
 		WriteTimeout: 10 * time.Second,
-		Addr:         ":8080",
+		Addr:         ":" + port,
 		Handler:      r,
 	}
 

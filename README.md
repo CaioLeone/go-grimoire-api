@@ -262,6 +262,10 @@ http://localhost:8080
   * Postman
   * Curl
 
+## Observação:
+O projeto utiliza SQLite para fins educacionais e demonstração.
+Em ambiente de produção, recomenda-se PostgreSQL ou MySQL.
+
 ## "Banco de Dados" em Memória
 
 Inicialmente, utilizaremos um armazenamento em memória com map.
@@ -311,8 +315,6 @@ type Application struct {
   5. InsertCreature(creature)
   6. UpdateCreature(id, creature)
   7. DeleteCreature(id)
-
-  
 
 ## Estrutura do Projeto (Clean Architecture - Simplificado)
 ```
