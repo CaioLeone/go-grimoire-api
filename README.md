@@ -353,6 +353,7 @@ type Application struct {
 - [X] Clean Architecture básica
 - [X] Swagger
 - [X] Testes Automatizados
+- [X] Docker
 
 ## Próximos Desafios (Upgrade do Projeto)
 
@@ -360,7 +361,6 @@ Se quiser evoluir depois:
 
 - [ ] Autenticação JWT
 - [ ] Cache com Redis
-- [ ] Docker
 - [ ] Deploy em produção
 - [ ] CI/CD
 - [ ] Rate Limiting
